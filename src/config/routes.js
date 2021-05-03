@@ -3,13 +3,12 @@ import testPage from "../pages/testPage"
 import SignInSide from "../pages/SignInSide"
 import NotFoundPage from "../pages/NotFoundPage";
 
-
-export default {
+const routes = {
   routes: [
     {
       path: '/',
       exact: true,
-      render:() => <Redirect to="/index" />
+      render: () => <Redirect to="/index"/>,
     },
     {
       path: '/index',
@@ -25,3 +24,5 @@ export default {
     },
   ]
 };
+
+export default routes;
