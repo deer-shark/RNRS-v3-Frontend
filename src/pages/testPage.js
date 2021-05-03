@@ -5,11 +5,9 @@ import Test2 from "../components/test2";
 class TestPage extends React.Component {
   render() {
     return (
-      <>
-        <Test/>
-        <Test2/>
-      </>
-
+      <div className={'header-container-text d-flex justify-content-center align-self-center'}>
+        <h1 className={'header-container-title'}>AAA 高中籃球聯賽</h1>
+      </div>
     )
   }
 }
