@@ -1,27 +1,16 @@
 import React from 'react';
 import {Container, Navbar} from "react-bootstrap";
+import {useLocation} from "react-router-dom";
 import Menu from "./Menu";
-import Background from '../img/2020_KSKG_XMAS3.jpg';
 import {LinkContainer} from 'react-router-bootstrap';
 import '../css/Header.css';
 
-var bgStyle = {
-  background: `url(${Background}) no-repeat fixed center center`,
-  backgroundPosition: 'center',
-  backgroundSize: 'cover',
-  backgroundRepeat: 'no-repeat',
-  backgroundAttachment: 'fixed',
-  width: '100%',
-  height: '100%',
-  position: 'fixed',
-  zIndex: '-1',
-  opacity: '0.5',
-};
-
 export default function Header() {
+  console.log(useLocation().pathname);
+  let custom = (useLocation().pathname === '/declare') ? ' custom' : '';
   return (
     <div className={'header-container'}>
-      <div className={'banner-container'} style={bgStyle}/>
+      <div className={'banner-container'+custom}/>
       <Container className={'nav-container font-weight-bold'} id={'navbar'}>
         <Navbar expand={'lg'} variant={'light'}>
           <Container>
