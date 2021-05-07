@@ -1,9 +1,8 @@
 import React from 'react';
+import Title from "../components/Title";
 
 export default function NotFoundPage() {
   return (
-    <div className={'header-container-text d-flex justify-content-center align-self-center'}>
-      <h1 className={'header-container-title'}>404 Not Found</h1>
-    </div>
+    <Title content="404 Not Found"/>
   );
 }

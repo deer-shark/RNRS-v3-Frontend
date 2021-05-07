@@ -1,6 +1,5 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
-import testPage from "../pages/testPage"
 import NotFoundPage from "../pages/NotFoundPage";
 import DeclarePage from "../pages/DeclarePage";
 import ScanPage from "../pages/ScanPage";
