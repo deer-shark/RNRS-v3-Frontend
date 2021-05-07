@@ -7,6 +7,7 @@ import ScanPage from "../pages/ScanPage";
 import ManageAPage from "../pages/ManageAPage";
 import ManageBPage from "../pages/ManageBPage";
 import LoginPage from "../pages/LoginPage";
+import IndexPage from "../pages/IndexPage";
 
 const routes = {
   routes: [
@@ -17,7 +18,7 @@ const routes = {
     },
     {
       path: '/index',
-      component: testPage,
+      component: IndexPage,
     },
     {
       path: '/declare',
