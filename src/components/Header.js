@@ -2,7 +2,8 @@ import React from 'react';
 import {Container, Navbar} from "react-bootstrap";
 import Menu from "./Menu";
 import Background from '../img/2020_KSKG_XMAS3.jpg';
-import {LinkContainer} from 'react-router-bootstrap'
+import {LinkContainer} from 'react-router-bootstrap';
+import '../css/Header.css';
 
 var bgStyle = {
   background: `url(${Background}) no-repeat fixed center center`,
@@ -26,7 +27,7 @@ export default function Header() {
           <Container>
             <Navbar.Brand href={'https://deershark.com'} id={'logo'}>鹿鯊工作室</Navbar.Brand>
             <LinkContainer to="/index">
-              <Navbar.Brand href={'/'} id={'product'}>新，實名制進場系統。</Navbar.Brand>
+              <Navbar.Brand id={'product'}>新，實名制進場系統。</Navbar.Brand>
             </LinkContainer>
             <Navbar.Toggle/>
             <Navbar.Collapse id={'navbarNav'}>
