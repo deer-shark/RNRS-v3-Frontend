@@ -21,9 +21,11 @@ export default function App() {
     <BrowserRouter>
       <>
         <Header/>
-        <Switch>
-          {renderRoutes(routes)}
-        </Switch>
+        <div id="Main">
+          <Switch>
+            {renderRoutes(routes)}
+          </Switch>
+        </div>
         <Footer/>
       </>
     </BrowserRouter>

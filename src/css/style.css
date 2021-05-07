@@ -5,6 +5,14 @@ Deputy Color: #FCB612
 */
 
 /* --- --- */
+html, body, #root {
+    height: 100%
+}
+
+#Main {
+    min-height: calc(100% - 216px);
+}
+
 body {
     background: #ededed;
 }
@@ -12,8 +20,8 @@ body {
 ::-moz-selection { /* Code for Firefox */
     background: rgba(92, 179, 204, 0.5);
 }
-  
-  ::selection {
+
+::selection {
     background: rgba(73, 143, 163, 0.5);
 }
 
@@ -77,7 +85,7 @@ body {
     width: 100%;
     min-height: 4rem;
     background: #FFFFFF;
-    border-radius:  0 0 2rem 2rem;
+    border-radius: 0 0 2rem 2rem;
     box-shadow: 0.5rem 0.5rem 2rem .25rem rgba(0, 0, 0, 0.5);
     overflow: hidden;
     margin-bottom: 2rem;
@@ -153,9 +161,9 @@ button.navbar-toggler:focus {
     padding: 1rem;
 }
 
-.info-container#main {
+/*.info-container#main {
     margin-top:-100px;
-}
+}*/
 
 .info-container label {
     /* color: #FFFFFF; */
@@ -223,7 +231,7 @@ button.navbar-toggler:focus {
 .footer-container .footer-container-card {
     padding: 2rem;
     background: #FFFFFF;
-    border-radius: 2rem;
+    border-radius: 2rem 2rem 0 0;
     box-shadow: 0.5rem 0.5rem 2rem .25rem rgba(0, 0, 0, 0.5);
     margin-top: 2rem;
 }
@@ -243,13 +251,13 @@ button.navbar-toggler:focus {
     padding-bottom: 0.5rem;
 }
 
-.footer-container #copyright {
+/*.footer-container #copyright {
     border-radius: 2rem 2rem 0 0;
     box-shadow: 0.5rem 0.5rem 2rem .25rem rgba(0, 0, 0, 0.5);
-}
+}*/
 
 /* --- font --- */
-.font-weight-bold, h1,h2, .toc-container.list-group .list-group-item:hover, .info-container .highlight {
+.font-weight-bold, h1, h2, .toc-container.list-group .list-group-item:hover, .info-container .highlight {
     font-weight: 700 !important;
 }
 
@@ -257,19 +265,23 @@ button.navbar-toggler:focus {
     .nav-container::after {
         min-height: 100%;
     }
+
     .nav-container #logo {
         display: none;
     }
-    .nav-container .nav-link, .nav-container .nav-link span  {
+
+    .nav-container .nav-link, .nav-container .nav-link span {
         margin-top: 0.5rem;
     }
+
     .info-container hr#col-sm-hr {
         display: flex;
     }
 }
+
 @media (min-width: 1600px) {
     .container, .nav-container nav.navbar div.container {
         width: 100%;
         max-width: 1600px;
     }
- }
+}
