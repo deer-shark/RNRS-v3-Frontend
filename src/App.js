@@ -5,35 +5,27 @@ import routesConfig from './config/routes';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/style.css';
 import './css/btn-rnrs.css';
-import {Container, Nav, Navbar} from "react-bootstrap";
-import Menu from "./components/Menu";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {fab} from '@fortawesome/free-brands-svg-icons';
+import {fas} from '@fortawesome/free-solid-svg-icons';
+import {far} from '@fortawesome/free-regular-svg-icons'
+
+library.add(fab, fas, far);
 
 let {routes} = routesConfig;
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Switch>
-        {/*<Header/>*/}
-        <div className={'header-container'}>
-          <div className={'banner-container'}/>
-          <Container className={'nav-container font-weight-bold'} id={'navbar'}>
-            <Navbar expand={'lg'} variant={'light'}>
-              <Container>
-                <Navbar.Brand href={'#'} id={'logo'}>鹿鯊工作室</Navbar.Brand>
-                <Navbar.Brand href={'#'} id={'product'}>新，實名制進場系統。</Navbar.Brand>
-                <Navbar.Toggle/>
-                <Navbar.Collapse id={'navbarNav'}>
-                  <Menu/>
-                </Navbar.Collapse>
-              </Container>
-            </Navbar>
-          </Container>
-          <Container>
-            {renderRoutes(routes)}
-          </Container>
-        </div>
-      </Switch>
+      <>
+        <Header/>
+        <Switch>
+          {renderRoutes(routes)}
+        </Switch>
+        <Footer/>
+      </>
     </BrowserRouter>
   );
 }

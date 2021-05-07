@@ -38,29 +38,40 @@ body {
 }
 
 .header-container {
-    height: 500px;
+    height: 64px;
 }
 
-.header-container .header-container-text {
+/*.header-container .header-container-text {
     position: relative;
-    top: 30%;
-    bottom: 30%;
+    top: 20%;
+    bottom: 0;
     left: 0;
     right: 0;
     margin: auto;
 }
 
 .header-container .header-container-text .header-container-title {
-    /* border-bottom: 0.6rem solid #5CB3CC;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-bottom: .2rem; */
+    padding: 0.8rem 2.2rem;
+    background: rgba(92, 179, 204, 0.9);
+    border-radius: 3rem;
+    color: #FFFFFF;
+    box-shadow: 0.5rem 0.5rem 2rem .25rem rgba(0, 0, 0, 0.5);
+}*/
+
+.title-container {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 2rem;
+}
+
+.title-container .title-container-title {
     padding: 0.8rem 2.2rem;
     background: rgba(92, 179, 204, 0.9);
     border-radius: 3rem;
     color: #FFFFFF;
     box-shadow: 0.5rem 0.5rem 2rem .25rem rgba(0, 0, 0, 0.5);
 }
+
 
 .nav-container {
     width: 100%;
@@ -102,9 +113,8 @@ button.navbar-toggler:focus {
     box-shadow: 0 0 0 .25rem #5CB3CC;
 }
 
-.banner-container {
-    width: 100%;
-    /* background: url(../img/banner.jpg); */
+/*.banner-container {
+    background: url(https://isd.server.imych.one/rnrs-new-20210208/timthumb.php?h=1080&w=1920&zc=1&src=./assets/img/david-tran-g-dZ1h7nQ0E-unsplash.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -112,9 +122,7 @@ button.navbar-toggler:focus {
     position: fixed;
     z-index: -1;
     opacity: 0.5;
-    /* height: 500px; */
-    height: 100%;
-}
+}*/
 
 .info-container {
     width: 100%;
@@ -167,7 +175,7 @@ button.navbar-toggler:focus {
     background: #5CB3CC;
 }
 
-.info-container h1 {
+.info-container h2 {
     border-bottom: 0.6rem solid #5CB3CC;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
@@ -240,19 +248,8 @@ button.navbar-toggler:focus {
     box-shadow: 0.5rem 0.5rem 2rem .25rem rgba(0, 0, 0, 0.5);
 }
 
-.banner-container {
-    background: url(https://isd.server.imych.one/rnrs-new-20210208/timthumb.php?h=1080&w=1920&zc=1&src=./assets/img/david-tran-g-dZ1h7nQ0E-unsplash.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    background-attachment: fixed;
-    position: fixed;
-    z-index: -1;
-    opacity: 0.5;
-}
-
 /* --- font --- */
-.font-weight-bold, h1, .toc-container.list-group .list-group-item:hover, .info-container .highlight {
+.font-weight-bold, h1,h2, .toc-container.list-group .list-group-item:hover, .info-container .highlight {
     font-weight: 700 !important;
 }
 

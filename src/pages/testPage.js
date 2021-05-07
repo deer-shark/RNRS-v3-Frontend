@@ -1,13 +1,18 @@
 import React from 'react';
-import Test from "../components/test";
-import Test2 from "../components/test2";
+import {Container} from "react-bootstrap";
+import Title from "../components/Title";
+import Contact from "../components/Contact";
 
 class TestPage extends React.Component {
   render() {
     return (
-      <div className={'header-container-text d-flex justify-content-center align-self-center'}>
-        <h1 className={'header-container-title'}>AAA 高中籃球聯賽</h1>
-      </div>
+      <>
+        <Title content="雄中雄女聯合耶誕晚會"/>
+        <Container className={'info-container'}>
+          <h2>身分資料填報</h2>
+        </Container>
+        <Contact/>
+      </>
     )
   }
 }
