@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Button, Form} from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Form } from "react-bootstrap";
 
 export default function LoginForm() {
   const [account, setAccount] = useState("");
@@ -22,7 +22,7 @@ export default function LoginForm() {
           <Form.Control
             autoFocus
             type="text"
-            /*value={account}*/
+            /* value={account} */
             onChange={(e) => setAccount(e.target.value)}
           />
         </Form.Group>
@@ -30,11 +30,17 @@ export default function LoginForm() {
           <Form.Label>密碼</Form.Label>
           <Form.Control
             type="password"
-            /*value={password}*/
+            /* value={password} */
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()} className={'btn-rnrs'}>
+        <Button
+          block
+          size="lg"
+          type="submit"
+          disabled={!validateForm()}
+          className="btn-rnrs"
+        >
           登入
         </Button>
       </Form>

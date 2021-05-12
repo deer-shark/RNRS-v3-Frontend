@@ -1,11 +1,11 @@
-import React from 'react';
-import {Container} from "react-bootstrap";
+import React from "react";
+import { Container } from "react-bootstrap";
 
 export default function Title(props) {
   return (
-    <Container className={'title-container'}>
-      <div className={'d-flex justify-content-center align-self-center'}>
-        <h1 className={'title-container-title'}>{props.content}</h1>
+    <Container className="title-container">
+      <div className="d-flex justify-content-center align-self-center">
+        <h1 className="title-container-title">{props.content}</h1>
       </div>
     </Container>
   );

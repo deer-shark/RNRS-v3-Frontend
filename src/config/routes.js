@@ -1,5 +1,5 @@
-import React from 'react';
-import {Redirect} from 'react-router-dom';
+import React from "react";
+import { Redirect } from "react-router-dom";
 import NotFoundPage from "../pages/NotFoundPage";
 import DeclarePage from "../pages/DeclarePage";
 import ScanPage from "../pages/ScanPage";
@@ -11,39 +11,39 @@ import IndexPage from "../pages/IndexPage";
 const routes = {
   routes: [
     {
-      path: '/',
+      path: "/",
       exact: true,
-      render: () => <Redirect to="/index"/>,
+      render: () => <Redirect to="/index" />,
     },
     {
-      path: '/index',
+      path: "/index",
       component: IndexPage,
     },
     {
-      path: '/declare',
+      path: "/declare",
       component: DeclarePage,
     },
     {
-      path: '/scan',
+      path: "/scan",
       component: ScanPage,
     },
     {
-      path: '/manageA',
+      path: "/manageA",
       component: ManageAPage,
     },
     {
-      path: '/manageB',
+      path: "/manageB",
       component: ManageBPage,
     },
     {
-      path: '/login',
+      path: "/login",
       component: LoginPage,
     },
     {
-      path: '*',
+      path: "*",
       component: NotFoundPage,
     },
-  ]
+  ],
 };
 
 export default routes;
