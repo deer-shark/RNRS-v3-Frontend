@@ -6,7 +6,6 @@ import Menu from "./Menu";
 import "../css/Header.css";
 
 export default function Header() {
-  console.log(useLocation().pathname);
   const custom = useLocation().pathname === "/declare" ? " custom" : "";
   return (
     <div className="header-container">
