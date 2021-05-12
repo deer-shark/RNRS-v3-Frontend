@@ -1,12 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import loadable from "@loadable/component";
 import NotFoundPage from "../pages/NotFoundPage";
-import DeclarePage from "../pages/DeclarePage";
-import ScanPage from "../pages/ScanPage";
-import ManageAPage from "../pages/ManageAPage";
-import ManageBPage from "../pages/ManageBPage";
-import LoginPage from "../pages/LoginPage";
-import IndexPage from "../pages/IndexPage";
 
 const routes = {
   routes: [
@@ -17,27 +12,27 @@ const routes = {
     },
     {
       path: "/index",
-      component: IndexPage,
+      component: loadable(() => import("../pages/IndexPage")),
     },
     {
       path: "/declare",
-      component: DeclarePage,
+      component: loadable(() => import("../pages/DeclarePage")),
     },
     {
       path: "/scan",
-      component: ScanPage,
+      component: loadable(() => import("../pages/ScanPage")),
     },
     {
       path: "/manageA",
-      component: ManageAPage,
+      component: loadable(() => import("../pages/ManageAPage")),
     },
     {
       path: "/manageB",
-      component: ManageBPage,
+      component: loadable(() => import("../pages/ManageBPage")),
     },
     {
       path: "/login",
-      component: LoginPage,
+      component: loadable(() => import("../pages/LoginPage")),
     },
     {
       path: "*",
