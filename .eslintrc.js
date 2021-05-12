@@ -18,6 +18,6 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
-    "react/prefer-stateless-function": "0",
+    "react/prefer-stateless-function": 0,
   },
 };
