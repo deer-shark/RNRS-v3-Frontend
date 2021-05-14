@@ -10,7 +10,7 @@ export default function DeclareForm() {
       <Container className="info-container">
         <Form>
           <h2>身分資料填報</h2>
-          <Row className="quention-part">
+          <Row className="question-part">
             <Col className="col-12">
               <h3>活動資訊</h3>
             </Col>
@@ -43,7 +43,7 @@ export default function DeclareForm() {
               </Form.Group>
             </Col>
           </Row>
-          <Row className="quention-part">
+          <Row className="question-part">
             <Col className="col-12">
               <h3>身分別</h3>
             </Col>
@@ -81,7 +81,7 @@ export default function DeclareForm() {
               </Form.Group>
             </Col>
           </Row>
-          <Row className="quention-part">
+          <Row className="question-part">
             <Col className="col-12">
               <h3>個人資訊</h3>
             </Col>
@@ -110,7 +110,7 @@ export default function DeclareForm() {
               </Form.Group>
             </Col>
           </Row>
-          <Row className="quention-part">
+          <Row className="question-part">
             <Col className="col-12">
               <h3>聯絡管道</h3>
             </Col>
