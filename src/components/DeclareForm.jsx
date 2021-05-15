@@ -7,15 +7,15 @@ import Title from "./Title";
 import * as actionCreators from "../redux/action";
 
 function DeclareForm(props) {
-  const { setBackground } = props;
+  const { setBackground, event } = props;
 
   useEffect(() => {
-    setBackground("stray.jpg");
+    setBackground(event.backgroundImage);
   });
 
   return (
     <>
-      <Title content="Stray 迷途" />
+      <Title content={event.name} />
       <Container className="info-container">
         <Form>
           <h2>身分資料填報</h2>
@@ -32,7 +32,7 @@ function DeclareForm(props) {
                   type="text"
                   id="form-register-time"
                   placeholder="系統自動填入，請勿更動"
-                  value="2021/05/23"
+                  value={event.date}
                   disabled
                 />
               </Form.Group>
@@ -46,7 +46,7 @@ function DeclareForm(props) {
                   type="text"
                   id="form-register-location"
                   placeholder="系統自動填入，請勿更動"
-                  value="高師大"
+                  value={event.location}
                   disabled
                 />
               </Form.Group>
@@ -67,11 +67,12 @@ function DeclareForm(props) {
                   defaultValue=""
                 >
                   <option value="" disabled>
-                    請選擇學校
+                    請選擇單位
                   </option>
-                  <option value="FSSH">鳳山高中 FSSH</option>
-                  <option value="SMHS">三民高中 SMHS</option>
-                  <option value="CJHS">前鎮高中 CJHS</option>
+                  {/* eslint-disable-next-line react/prop-types */}
+                  {event.orgs.map((item) => (
+                    <option value={item.value}>{item.text}</option>
+                  ))}
                 </Form.Control>
               </Form.Group>
             </Col>
@@ -88,12 +89,10 @@ function DeclareForm(props) {
                   <option value="" disabled>
                     請選擇角色
                   </option>
-                  <option>社員</option>
-                  <option>非社員</option>
-                  <option>特邀</option>
-                  <option>教師</option>
-                  <option>家長</option>
-                  <option>訪客</option>
+                  {/* eslint-disable-next-line react/prop-types */}
+                  {event.roles.map((item) => (
+                    <option value={item.value}>{item.text}</option>
+                  ))}
                 </Form.Control>
               </Form.Group>
             </Col>
@@ -115,16 +114,18 @@ function DeclareForm(props) {
               </Form.Group>
             </Col>
             <Col md>
-              <Form.Group>
-                <Form.Label htmlFor="form-register-idcard">
-                  <FontAwesomeIcon icon="id-card" /> 身分證字號
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  id="form-register-idcard"
-                  placeholder="身分證字號"
-                />
-              </Form.Group>
+              {event.idcard && (
+                <Form.Group>
+                  <Form.Label htmlFor="form-register-idcard">
+                    <FontAwesomeIcon icon="id-card" /> 身分證字號
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="form-register-idcard"
+                    placeholder="身分證字號"
+                  />
+                </Form.Group>
+              )}
             </Col>
           </Row>
           <Row className="question-part">
@@ -170,26 +171,51 @@ function DeclareForm(props) {
           </Row>
         </Form>
       </Container>
-      <Container className="info-container">
-        <h2>健康聲明書</h2>
-        <iframe
-          src="https://docs.google.com/forms/d/e/1FAIpQLScuX6nkwXyRCq_ldYt-DMtBZlhYxHOP2ZD26xEB8bPNUz6D7g/viewform?embedded=true"
-          height="400"
-          width="100%"
-          frameBorder="0"
-          marginHeight="0"
-          marginWidth="0"
-          title="健康聲明書"
-        >
-          載入中…
-        </iframe>
-      </Container>
+      {event.advancedForm && (
+        <Container className="info-container">
+          <h2>健康聲明書</h2>
+          <iframe
+            src={event.googleFormSrc}
+            height="400"
+            width="100%"
+            frameBorder="0"
+            marginHeight="0"
+            marginWidth="0"
+            title="健康聲明書"
+          >
+            載入中…
+          </iframe>
+        </Container>
+      )}
     </>
   );
 }
 
 DeclareForm.propTypes = {
   setBackground: PropTypes.func.isRequired,
+  event: PropTypes.arrayOf(
+    PropTypes.shape({
+      eventId: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+      idcard: PropTypes.bool.isRequired,
+      advancedForm: PropTypes.bool.isRequired,
+      googleFormSrc: PropTypes.string.isRequired,
+      backgroundImage: PropTypes.string.isRequired,
+      orgs: PropTypes.arrayOf(
+        PropTypes.shape({
+          value: PropTypes.string.isRequired,
+          text: PropTypes.string.isRequired,
+        })
+      ).isRequired,
+      roles: PropTypes.arrayOf(
+        PropTypes.shape({
+          value: PropTypes.string.isRequired,
+          text: PropTypes.string.isRequired,
+        })
+      ).isRequired,
+    })
+  ).isRequired,
 };
 
 export default connect(null, actionCreators)(DeclareForm);
