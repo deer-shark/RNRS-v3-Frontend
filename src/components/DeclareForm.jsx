@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import Title from "./Title";
+import * as actionCreators from "../redux/action";
 
-export default function DeclareForm() {
+function DeclareForm(props) {
+  const { setBackground } = props;
+
+  useEffect(() => {
+    setBackground("stray.jpg");
+  });
+
   return (
     <>
       <Title content="Stray 迷途" />
@@ -52,8 +61,12 @@ export default function DeclareForm() {
                 <Form.Label htmlFor="form-register-org">
                   <FontAwesomeIcon icon="school" /> 單位
                 </Form.Label>
-                <Form.Control as="select" id="form-register-org">
-                  <option value="" disabled selected>
+                <Form.Control
+                  as="select"
+                  id="form-register-org"
+                  defaultValue=""
+                >
+                  <option value="" disabled>
                     請選擇學校
                   </option>
                   <option value="FSSH">鳳山高中 FSSH</option>
@@ -67,8 +80,12 @@ export default function DeclareForm() {
                 <Form.Label htmlFor="form-register-role">
                   <FontAwesomeIcon icon="user-tie" /> 角色
                 </Form.Label>
-                <Form.Control as="select" id="form-register-role">
-                  <option value="" disabled selected>
+                <Form.Control
+                  as="select"
+                  id="form-register-role"
+                  defaultValue=""
+                >
+                  <option value="" disabled>
                     請選擇角色
                   </option>
                   <option>社員</option>
@@ -170,3 +187,9 @@ export default function DeclareForm() {
     </>
   );
 }
+
+DeclareForm.propTypes = {
+  setBackground: PropTypes.func.isRequired,
+};
+
+export default connect(null, actionCreators)(DeclareForm);

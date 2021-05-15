@@ -2,14 +2,26 @@ import React from "react";
 import { Container, Navbar } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import Menu from "./Menu";
 import "../css/Header.css";
 
-export default function Header() {
-  const custom = useLocation().pathname === "/declare" ? " custom" : "";
+function Header(props) {
+  // const custom = useLocation().pathname === "/declare" ? " custom" : "";
+  const { backgroundName } = props;
+  let picName;
+  if (useLocation().pathname.startsWith("/declare/")) {
+    picName = backgroundName;
+  } else {
+    picName = "general.jpg";
+  }
+  const styleBanner = {
+    background: `url(/img/${picName}) no-repeat fixed center center / cover`,
+  };
   return (
     <div className="header-container">
-      <div className={`banner-container${custom}`} />
+      <div className="banner-container" style={styleBanner} />
       <Container className="nav-container font-weight-bold" id="navbar">
         <Navbar expand="lg" variant="light">
           <Container>
@@ -29,3 +41,11 @@ export default function Header() {
     </div>
   );
 }
+
+Header.propTypes = {
+  backgroundName: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = (store) => ({ backgroundName: store.backgroundName });
+
+export default connect(mapStateToProps, null)(Header);
