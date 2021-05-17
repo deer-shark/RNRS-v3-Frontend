@@ -21,6 +21,7 @@ export default function EventList(props) {
               onClick={() => {
                 history.push(`/declare/${item.eventId}`);
               }}
+              key={item.eventId}
             >
               <h5>{item.name}</h5>
               <Badge variant="warning">
