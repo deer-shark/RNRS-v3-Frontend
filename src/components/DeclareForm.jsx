@@ -79,7 +79,7 @@ function DeclareForm(props) {
             <Col md>
               <Form.Group>
                 <Form.Label htmlFor="form-register-role">
-                  <FontAwesomeIcon icon="user-tie" /> 角色
+                  <FontAwesomeIcon icon="user-tie" /> 身分
                 </Form.Label>
                 <Form.Control
                   as="select"
@@ -87,7 +87,7 @@ function DeclareForm(props) {
                   defaultValue=""
                 >
                   <option value="" disabled>
-                    請選擇角色
+                    請選擇身分
                   </option>
                   {/* eslint-disable-next-line react/prop-types */}
                   {event.roles.map((item) => (
