@@ -193,29 +193,28 @@ function DeclareForm(props) {
 
 DeclareForm.propTypes = {
   setBackground: PropTypes.func.isRequired,
-  event: PropTypes.arrayOf(
-    PropTypes.shape({
-      eventId: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
-      idcard: PropTypes.bool.isRequired,
-      advancedForm: PropTypes.bool.isRequired,
-      googleFormSrc: PropTypes.string.isRequired,
-      backgroundImage: PropTypes.string.isRequired,
-      orgs: PropTypes.arrayOf(
-        PropTypes.shape({
-          value: PropTypes.string.isRequired,
-          text: PropTypes.string.isRequired,
-        })
-      ).isRequired,
-      roles: PropTypes.arrayOf(
-        PropTypes.shape({
-          value: PropTypes.string.isRequired,
-          text: PropTypes.string.isRequired,
-        })
-      ).isRequired,
-    })
-  ).isRequired,
+  event: PropTypes.shape({
+    eventId: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    idcard: PropTypes.bool.isRequired,
+    advancedForm: PropTypes.bool.isRequired,
+    googleFormSrc: PropTypes.string.isRequired,
+    backgroundImage: PropTypes.string.isRequired,
+    orgs: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    roles: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+  }).isRequired,
 };
 
 export default connect(null, actionCreators)(DeclareForm);
