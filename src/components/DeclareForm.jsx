@@ -71,7 +71,9 @@ function DeclareForm(props) {
                   </option>
                   {/* eslint-disable-next-line react/prop-types */}
                   {event.orgs.map((item) => (
-                    <option value={item.value}>{item.text}</option>
+                    <option value={item.value} key={item.value}>
+                      {item.text}
+                    </option>
                   ))}
                 </Form.Control>
               </Form.Group>
@@ -91,7 +93,9 @@ function DeclareForm(props) {
                   </option>
                   {/* eslint-disable-next-line react/prop-types */}
                   {event.roles.map((item) => (
-                    <option value={item.value}>{item.text}</option>
+                    <option value={item.value} key={item.value}>
+                      {item.text}
+                    </option>
                   ))}
                 </Form.Control>
               </Form.Group>
