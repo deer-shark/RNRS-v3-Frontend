@@ -5,14 +5,15 @@ import * as ZXing from "@zxing/library";
 import Swal from "sweetalert2";
 
 let codeReader;
-let lastResult;
+// let lastResult;
 
 function scanStart(deviceId) {
   codeReader.decodeFromVideoDevice(deviceId, "scanner", (result, err) => {
     if (result) {
-      if (result.text !== lastResult) {
+      if (!result.text) {
+        const { text } = result; // Deconstruct the object, ref: https://dmitripavlutin.com/javascript-object-destructuring/
         Swal.fire({
-          text: result.text,
+          text,
           showConfirmButton: false,
           icon: "success",
           timer: 1000,
@@ -26,10 +27,32 @@ function scanStart(deviceId) {
   });
 }
 
-function scanReset() {
-  codeReader.reset();
-  lastResult = undefined;
-}
+// scanStart() -> scan.start()
+
+const scan = {
+  start: (deviceId) => {
+    codeReader.decodeFromVideoDevice(deviceId, "scanner", (result, err) => {
+      if (result) {
+        if (!result.text) {
+          const { text } = result; // Deconstruct the object, ref: https://dmitripavlutin.com/javascript-object-destructuring/
+          Swal.fire({
+            text,
+            showConfirmButton: false,
+            icon: "success",
+            timer: 1000,
+          });
+          // lastResult = result.text;
+        }
+      }
+      if (err && !(err instanceof ZXing.NotFoundException)) {
+        throw err;
+      }
+    });
+  },
+  reset: () => {
+    codeReader.reset();
+  },
+};
 
 const useConstructor = (callBack = () => {}) => {
   const hasBeenCalled = useRef(false);
@@ -74,7 +97,6 @@ export default function ScanPage() {
   useEffect(() => {
     return () => {
       codeReader.reset();
-      lastResult = undefined;
     };
   }, []);
   return (
@@ -155,10 +177,11 @@ export default function ScanPage() {
             <Form.Group>
               <Form.Label htmlFor="form-scan-event" />
               <Button
+                className="btn-rnrs"
                 block
                 onClick={() => {
                   if (isScanning) {
-                    scanReset();
+                    scan.reset();
                     setIsScanning(false);
                   } else {
                     setIsMirror(devices[deviceIndex].mirror);
