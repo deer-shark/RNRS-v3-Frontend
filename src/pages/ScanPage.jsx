@@ -5,27 +5,7 @@ import * as ZXing from "@zxing/library";
 import Swal from "sweetalert2";
 
 let codeReader;
-// let lastResult;
-
-function scanStart(deviceId) {
-  codeReader.decodeFromVideoDevice(deviceId, "scanner", (result, err) => {
-    if (result) {
-      if (!result.text) {
-        const { text } = result; // Deconstruct the object, ref: https://dmitripavlutin.com/javascript-object-destructuring/
-        Swal.fire({
-          text,
-          showConfirmButton: false,
-          icon: "success",
-          timer: 1000,
-        });
-        // lastResult = result.text;
-      }
-    }
-    if (err && !(err instanceof ZXing.NotFoundException)) {
-      console.error(err);
-    }
-  });
-}
+let lastResult;
 
 // scanStart() -> scan.start()
 
@@ -41,7 +21,7 @@ const scan = {
             icon: "success",
             timer: 1000,
           });
-          // lastResult = result.text;
+          lastResult = result.text;
         }
       }
       if (err && !(err instanceof ZXing.NotFoundException)) {
@@ -51,6 +31,7 @@ const scan = {
   },
   reset: () => {
     codeReader.reset();
+    lastResult = undefined;
   },
 };
 
@@ -97,6 +78,7 @@ export default function ScanPage() {
   useEffect(() => {
     return () => {
       codeReader.reset();
+      lastResult = undefined;
     };
   }, []);
   return (
