@@ -12,19 +12,18 @@ let lastResult;
 const scan = {
   start: (deviceId) => {
     codeReader.decodeFromVideoDevice(deviceId, "scanner", (result, err) => {
-      if (result) {
-        if (!result.text) {
-          const { text } = result; // Deconstruct the object, ref: https://dmitripavlutin.com/javascript-object-destructuring/
-          Swal.fire({
-            text,
-            showConfirmButton: false,
-            icon: "success",
-            timer: 1000,
-          });
-          lastResult = result.text;
-        }
+      if (result && result.text !== lastResult) {
+        // Deconstruct the object, ref: https://dmitripavlutin.com/javascript-object-destructuring/
+        const { text } = result;
+        Swal.fire({
+          text,
+          showConfirmButton: false,
+          icon: "success",
+          timer: 1000,
+        });
+        lastResult = result.text;
       }
-      if (err && !(err instanceof ZXing.NotFoundException)) {
+      if (!(err instanceof ZXing.NotFoundException)) {
         throw err;
       }
     });
@@ -35,10 +34,10 @@ const scan = {
   },
 };
 
-const useConstructor = (callBack = () => {}) => {
+const useConstructor = (callback = () => {}) => {
   const hasBeenCalled = useRef(false);
   if (hasBeenCalled.current) return;
-  callBack();
+  callback();
   hasBeenCalled.current = true;
 };
 
@@ -167,7 +166,7 @@ export default function ScanPage() {
                     setIsScanning(false);
                   } else {
                     setIsMirror(devices[deviceIndex].mirror);
-                    scanStart(devices[deviceIndex].deviceId);
+                    scan.start(devices[deviceIndex].deviceId);
                     setIsScanning(true);
                   }
                 }}
