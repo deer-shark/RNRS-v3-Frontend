@@ -1,17 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Title from "./Title";
-import * as actionCreators from "../redux/action";
+import StoreContext from "../store/StoreContext";
+import { setBackground } from "../store/actions/appAction";
 
-function DeclareForm(props) {
-  const { setBackground, event } = props;
+export default function DeclareForm(props) {
+  const { event } = props;
+  const { state, dispatch } = useContext(StoreContext);
+  const { backgroundName } = state.app;
 
   useEffect(() => {
-    setBackground(event.backgroundImage);
-  });
+    dispatch(setBackground(event.backgroundImage));
+  }, [backgroundName]);
 
   return (
     <>
@@ -196,7 +198,6 @@ function DeclareForm(props) {
 }
 
 DeclareForm.propTypes = {
-  setBackground: PropTypes.func.isRequired,
   event: PropTypes.shape({
     eventId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -220,5 +221,3 @@ DeclareForm.propTypes = {
     ).isRequired,
   }).isRequired,
 };
-
-export default connect(null, actionCreators)(DeclareForm);

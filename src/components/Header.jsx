@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Navbar } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import Menu from "./Menu";
 import "../css/Header.css";
+import StoreContext from "../store/StoreContext";
 
-function Header(props) {
-  // const custom = useLocation().pathname === "/declare" ? " custom" : "";
-  const { backgroundName } = props;
+export default function Header() {
+  const { state } = useContext(StoreContext);
+  const { backgroundName } = state.app;
+
   let picName;
   if (useLocation().pathname.startsWith("/declare/")) {
     picName = backgroundName;
@@ -41,11 +41,3 @@ function Header(props) {
     </div>
   );
 }
-
-Header.propTypes = {
-  backgroundName: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (store) => ({ backgroundName: store.backgroundName });
-
-export default connect(mapStateToProps, null)(Header);
