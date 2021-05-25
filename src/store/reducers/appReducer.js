@@ -1,20 +1,19 @@
-import constant from "./constant";
+import constant from "../constant";
 
 const initState = {
   backgroundName: "general.jpg",
 };
 
-function reducer(state = initState, action) {
+function appReducer(state = initState, action) {
   switch (action.type) {
-    case constant.type.SET_BACKGROUND: {
+    case constant.type.app.SET_BACKGROUND:
       return {
         ...state,
         backgroundName: action.name,
       };
-    }
     default:
       return state;
   }
 }
 
-export default reducer;
+export default appReducer;

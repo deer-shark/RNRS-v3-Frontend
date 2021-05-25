@@ -1,7 +1,7 @@
-import constant from "./constant";
+import constant from "../constant";
 
 export const setBackground = (name) => ({
-  type: constant.type.SET_BACKGROUND,
+  type: constant.type.app.SET_BACKGROUND,
   name,
 });
 
