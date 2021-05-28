@@ -73,8 +73,8 @@ export default function DeclareForm(props) {
                   </option>
                   {/* eslint-disable-next-line react/prop-types */}
                   {event.orgs.map((item) => (
-                    <option value={item.value} key={item.value}>
-                      {item.text}
+                    <option value={item.value} key={item.id}>
+                      {item.value}
                     </option>
                   ))}
                 </Form.Control>
@@ -95,8 +95,8 @@ export default function DeclareForm(props) {
                   </option>
                   {/* eslint-disable-next-line react/prop-types */}
                   {event.roles.map((item) => (
-                    <option value={item.value} key={item.value}>
-                      {item.text}
+                    <option value={item.value} key={item.id}>
+                      {item.value}
                     </option>
                   ))}
                 </Form.Control>
@@ -119,20 +119,7 @@ export default function DeclareForm(props) {
                 />
               </Form.Group>
             </Col>
-            <Col md>
-              {event.idcard && (
-                <Form.Group>
-                  <Form.Label htmlFor="form-register-idcard">
-                    <FontAwesomeIcon icon="id-card" /> 身分證字號
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    id="form-register-idcard"
-                    placeholder="身分證字號"
-                  />
-                </Form.Group>
-              )}
-            </Col>
+            <Col />
           </Row>
           <Row className="question-part">
             <Col className="col-12">
@@ -177,7 +164,7 @@ export default function DeclareForm(props) {
           </Row>
         </Form>
       </Container>
-      {event.advancedForm && (
+      {event.googleFormSrc && (
         <Container className="info-container">
           <h2>健康聲明書</h2>
           <iframe
@@ -199,24 +186,22 @@ export default function DeclareForm(props) {
 
 DeclareForm.propTypes = {
   event: PropTypes.shape({
-    eventId: PropTypes.string.isRequired,
+    code: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
-    idcard: PropTypes.bool.isRequired,
-    advancedForm: PropTypes.bool.isRequired,
     googleFormSrc: PropTypes.string.isRequired,
     backgroundImage: PropTypes.string.isRequired,
     orgs: PropTypes.arrayOf(
       PropTypes.shape({
         value: PropTypes.string.isRequired,
-        text: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
       })
     ).isRequired,
     roles: PropTypes.arrayOf(
       PropTypes.shape({
         value: PropTypes.string.isRequired,
-        text: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
       })
     ).isRequired,
   }).isRequired,

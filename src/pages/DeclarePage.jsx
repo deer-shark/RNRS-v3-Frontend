@@ -1,12 +1,60 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useMemo, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import Contact from "../components/Contact";
 import DeclareForm from "../components/DeclareForm";
 import EventList from "../components/EventList";
+import API from "../API";
 
 export default function DeclarePage() {
-  const { eventId } = useParams();
-  const eventMock = {
+  const { eventCode } = useParams();
+  const history = useHistory();
+  const [data, setData] = useState(null);
+
+  useMemo(() => {
+    if (data !== null) setData(null);
+    if (eventCode === undefined) {
+      API.get("/event").then((res) => {
+        if (res.status === 200) setData(res.data);
+      });
+    } else {
+      API.get(`/event/${eventCode}`).then((res) => {
+        switch (res.status) {
+          case 200:
+            setData(res.data);
+            break;
+          case 404:
+            history.push("/404");
+            break;
+          default:
+            break;
+        }
+      });
+    }
+  }, [eventCode]);
+
+  /* useEffect(() => {
+    console.log("E");
+    if (eventId === undefined) {
+      API.get("/event").then((res) => {
+        if (res.status === 200) data = res.data;
+      });
+    } else {
+      API.get(`/event/${eventId}`).then((res) => {
+        switch (res.status) {
+          case 200:
+            data = res.data;
+            break;
+          case 404:
+            history.push("/404");
+            break;
+          default:
+            break;
+        }
+      });
+    }
+  }, [eventId, data]); */
+
+  /* const eventMock = {
     stray: {
       eventId: "stray",
       name: "Stray 迷途",
@@ -99,13 +147,16 @@ export default function DeclarePage() {
       date: "2021/06/12",
       location: "草屯商工",
     },
-  ];
+  ]; */
   return (
     <>
-      {eventId === undefined ? (
-        <EventList events={events} />
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {data === null ? (
+        <></>
+      ) : eventCode === undefined ? (
+        <EventList events={data ?? [{ eventId: "" }]} />
       ) : (
-        <DeclareForm event={event} />
+        <DeclareForm event={data} />
       )}
       <Contact />
     </>

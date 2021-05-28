@@ -15,7 +15,7 @@ const routes = {
       component: loadable(() => import("../pages/IndexPage")),
     },
     {
-      path: "/declare/:eventId?",
+      path: "/declare/:eventCode?",
       component: loadable(() => import("../pages/DeclarePage")),
     },
     {

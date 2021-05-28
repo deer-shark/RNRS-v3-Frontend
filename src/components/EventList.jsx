@@ -19,9 +19,9 @@ export default function EventList(props) {
               action
               className="rnrs-list-item"
               onClick={() => {
-                history.push(`/declare/${item.eventId}`);
+                history.push(`/declare/${item.code}`);
               }}
-              key={item.eventId}
+              key={item.id}
             >
               <h5>{item.name}</h5>
               <Badge variant="warning">
@@ -41,7 +41,8 @@ export default function EventList(props) {
 EventList.propTypes = {
   events: PropTypes.arrayOf(
     PropTypes.shape({
-      eventId: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      code: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
       location: PropTypes.string.isRequired,
