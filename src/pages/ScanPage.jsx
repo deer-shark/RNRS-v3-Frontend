@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as ZXing from "@zxing/library";
 import Swal from "sweetalert2";
+import useConstructor from "../units/useConstructor";
 
 let codeReader;
 let lastResult;
@@ -32,13 +33,6 @@ const scan = {
     codeReader.reset();
     lastResult = undefined;
   },
-};
-
-const useConstructor = (callback = () => {}) => {
-  const hasBeenCalled = useRef(false);
-  if (hasBeenCalled.current) return;
-  callback();
-  hasBeenCalled.current = true;
 };
 
 export default function ScanPage() {
