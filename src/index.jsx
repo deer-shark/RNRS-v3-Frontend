@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { StateInspector } from "reinspect";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <StateInspector name="App">
+      <App />
+    </StateInspector>
   </React.StrictMode>,
   document.getElementById("root")
 );
