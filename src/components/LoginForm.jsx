@@ -1,23 +1,70 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import Swal from "sweetalert2";
+import ExpiredStorage from "expired-storage";
+import jwtDecode from "jwt-decode";
+import { useHistory } from "react-router-dom";
+import API from "../API";
+import { Toast } from "../units/Alert";
+import StoreContext from "../store/StoreContext";
+import { setUser } from "../store/actions/userAction";
 
 export default function LoginForm() {
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
+  const { dispatch } = useContext(StoreContext);
+  const history = useHistory();
 
   function validateForm() {
     return account.length > 0 && password.length > 0;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    const payload = { account, password };
+    await API.post("/auth", payload)
+      .then((res) => {
+        switch (res.status) {
+          case 200: {
+            // eslint-disable-next-line camelcase
+            const { access_token, expires_in } = res.data;
+            new ExpiredStorage().setItem(
+              "access_token",
+              access_token,
+              expires_in
+            );
+            const { user } = jwtDecode(access_token);
+            dispatch(setUser(user));
+            Toast.fire({
+              icon: "success",
+              title: `${user.name} 歡迎回來`,
+            });
+            setTimeout(() => {
+              history.push("/index");
+            }, 1500);
+            break;
+          }
+          case 401:
+            Swal.fire({
+              title: "登入失敗!",
+              text: "使用者帳號或密碼錯誤。",
+              icon: "error",
+            });
+            break;
+          default:
+            throw new Error();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
     <div className="Login">
       <Form onSubmit={handleSubmit}>
         <h2>使用者登入</h2>
-        <Form.Group size="lg" controlId="email">
+        <Form.Group size="lg" controlId="account">
           <Form.Label>帳號</Form.Label>
           <Form.Control
             autoFocus
