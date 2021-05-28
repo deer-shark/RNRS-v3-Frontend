@@ -1,13 +1,15 @@
+import constant from "../constant";
+
 const initState = {
   user: {},
 };
 
 function userReducer(state = initState, action) {
   switch (action.type) {
-    case "SET_USER":
+    case constant.type.user.SET_USER:
       return {
         ...state,
-        user: action.payload,
+        user: action.user,
       };
     default:
       return state;
