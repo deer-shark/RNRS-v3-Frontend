@@ -23,7 +23,7 @@ const combineReducer = (reducers) => {
 };
 
 const reducers = combineReducer({
-  ussr: userReducer,
+  user: userReducer,
   app: appReducer,
 });
 
