@@ -23,7 +23,7 @@ library.add(fab, fas, far);
 const initState = reducers();
 
 export default function App() {
-  const store = useReducer(reducers, initState, null, "S");
+  const store = useReducer(reducers, initState, undefined, "S");
   return (
     <BrowserRouter>
       <StoreContext.Provider value={{ state: store[0], dispatch: store[1] }}>
