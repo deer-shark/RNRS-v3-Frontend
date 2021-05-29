@@ -24,7 +24,7 @@ const scan = {
         });
         lastResult = result.text;
       }
-      if (!(err instanceof ZXing.NotFoundException)) {
+      if (err && !(err instanceof ZXing.NotFoundException)) {
         throw err;
       }
     });
