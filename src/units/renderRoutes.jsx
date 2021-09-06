@@ -11,6 +11,9 @@ const renderRoutes = (routes) =>
           exact={route.exact}
           strict={route.strict}
           render={(props) => {
+            if (route.render) {
+              return route.render();
+            }
             const authed = !!new ExpiredStorage().getJson("user");
             if (!route.protected || authed || route.path === "/login") {
               // eslint-disable-next-line react/jsx-props-no-spreading
