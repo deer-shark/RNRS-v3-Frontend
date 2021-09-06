@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import ExpiredStorage from "expired-storage";
@@ -6,13 +6,10 @@ import jwtDecode from "jwt-decode";
 import { useHistory } from "react-router-dom";
 import API from "../API";
 import { Toast } from "../units/Alert";
-import StoreContext from "../store/StoreContext";
-import { setUser } from "../store/actions/userAction";
 
 export default function LoginForm() {
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
-  const { dispatch } = useContext(StoreContext);
   const history = useHistory();
 
   function validateForm() {
@@ -28,13 +25,10 @@ export default function LoginForm() {
           case 200: {
             // eslint-disable-next-line camelcase
             const { access_token, expires_in } = res.data;
-            new ExpiredStorage().setItem(
-              "access_token",
-              access_token,
-              expires_in
-            );
+            const expiredStorage = new ExpiredStorage();
             const { user } = jwtDecode(access_token);
-            dispatch(setUser(user));
+            expiredStorage.setItem("access_token", access_token, expires_in);
+            expiredStorage.setJson("user", user, expires_in);
             Toast.fire({
               icon: "success",
               title: `${user.name} 歡迎回來`,

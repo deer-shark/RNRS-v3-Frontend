@@ -4,24 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as ZXing from "@zxing/library";
 import Swal from "sweetalert2";
 import useConstructor from "../units/useConstructor";
+import API from "../API";
 
 let codeReader;
 let lastResult;
 
-// scanStart() -> scan.start()
-
 const scan = {
-  start: (deviceId) => {
+  start: (deviceId, successCallback) => {
     codeReader.decodeFromVideoDevice(deviceId, "scanner", (result, err) => {
       if (result && result.text !== lastResult) {
-        // Deconstruct the object, ref: https://dmitripavlutin.com/javascript-object-destructuring/
         const { text } = result;
-        Swal.fire({
-          text,
-          showConfirmButton: false,
-          icon: "success",
-          timer: 1000,
-        });
+        successCallback(text);
         lastResult = result.text;
       }
       if (err && !(err instanceof ZXing.NotFoundException)) {
@@ -39,9 +32,16 @@ export default function ScanPage() {
   const [devices, setDevices] = useState([]);
   const [isMirror, setIsMirror] = useState(false);
   const [deviceIndex, setDeviceIndex] = useState(0);
-  const [eventSelected, setEventSelected] = useState(false);
-  const [gateSelected, setGateSelected] = useState(false);
+  const [eventList, setEventList] = useState([{ id: 0, value: "Loading..." }]);
+  const [gateList, setGateList] = useState([]);
+  const [eventVal, setEventVal] = useState(0);
+  const [gateVal, setGateVal] = useState(0);
   const [isScanning, setIsScanning] = useState(false);
+  /* eslint-disable no-unused-vars */
+  const [infoOrg, setInfoOrg] = useState("");
+  const [infoRole, setInfoRole] = useState("");
+  const [infoName, setInfoName] = useState("");
+  const [infoTime, setInfoTime] = useState("");
 
   useConstructor(() => {
     codeReader = new ZXing.BrowserMultiFormatReader();
@@ -74,6 +74,82 @@ export default function ScanPage() {
       lastResult = undefined;
     };
   }, []);
+
+  useEffect(() => {
+    API.get("/event/organize").then((res) => {
+      if (res.status === 200) setEventList(res.data);
+    });
+  }, [true]);
+
+  function getGates(value) {
+    API.get(`/event/${value.split("-")[1]}`).then((res) => {
+      if (res.status === 200) {
+        setGateList(res.data.gates);
+      }
+    });
+  }
+
+  async function onScanSuccess(text) {
+    const payload = { hash: text, gateId: gateVal };
+    await API.post(`/checkin/${eventVal.split("-")[0]}`, payload)
+      .then((res) => {
+        console.log(res);
+        switch (res.status) {
+          case 201: {
+            const {
+              id,
+              declare: {
+                name,
+                createdAt,
+                EventOrg: { value: org },
+                EventRole: { value: role },
+              },
+            } = res.data;
+
+            setInfoName(name);
+            setInfoTime(new Date(createdAt).toLocaleString());
+            setInfoOrg(org);
+            setInfoRole(role);
+
+            Swal.fire({
+              title: "刷入成功",
+              html: `簽到ID：${id}<br>現在時間：${new Date().toLocaleString()}`,
+              showConfirmButton: false,
+              icon: "success",
+              timer: 1500,
+            });
+            break;
+          }
+          case 400: {
+            break;
+          }
+          case 404: {
+            break;
+          }
+          default:
+            break;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function onStartOrReset() {
+    if (isScanning) {
+      scan.reset();
+      setIsScanning(false);
+      setInfoName("");
+      setInfoTime("");
+      setInfoOrg("");
+      setInfoRole("");
+    } else {
+      setIsMirror(devices[deviceIndex].mirror);
+      scan.start(devices[deviceIndex].deviceId, onScanSuccess);
+      setIsScanning(true);
+    }
+  }
+
   return (
     <>
       <Container className="info-container">
@@ -87,17 +163,21 @@ export default function ScanPage() {
               <Form.Control
                 as="select"
                 id="form-scan-event"
-                defaultValue=""
-                onChange={() => {
-                  setEventSelected(true);
+                value={eventVal}
+                onChange={(e) => {
+                  setEventVal(e.target.value);
+                  setGateVal(0);
+                  getGates(e.target.value);
                 }}
               >
-                <option value="" disabled>
+                <option value="0" disabled>
                   請選擇活動
                 </option>
-                <option value="e1">活動一</option>
-                <option value="e2">活動二</option>
-                <option value="e3">活動三</option>
+                {eventList.map((item) => (
+                  <option value={`${item.id}-${item.code}`} key={item.id}>
+                    {item.name}
+                  </option>
+                ))}
               </Form.Control>
             </Form.Group>
           </Col>
@@ -109,17 +189,20 @@ export default function ScanPage() {
               <Form.Control
                 as="select"
                 id="form-scan-event"
-                defaultValue=""
-                onChange={() => {
-                  setGateSelected(true);
+                value={gateVal}
+                onChange={(e) => {
+                  setGateVal(e.target.value);
                 }}
+                disabled={eventVal === 0}
               >
-                <option value="" disabled>
+                <option value="0" disabled>
                   請選擇入口
                 </option>
-                <option value="g1">入口一</option>
-                <option value="g2">入口二</option>
-                <option value="g3">入口三</option>
+                {gateList.map((item) => (
+                  <option value={item.id} key={item.id}>
+                    {item.value}
+                  </option>
+                ))}
               </Form.Control>
             </Form.Group>
           </Col>
@@ -132,8 +215,8 @@ export default function ScanPage() {
                 as="select"
                 id="form-scan-event"
                 defaultValue="0"
-                onChange={(event) => {
-                  setDeviceIndex(event.target.value);
+                onChange={(e) => {
+                  setDeviceIndex(e.target.value);
                 }}
                 disabled={isScanning}
               >
@@ -154,17 +237,8 @@ export default function ScanPage() {
               <Button
                 className="btn-rnrs"
                 block
-                onClick={() => {
-                  if (isScanning) {
-                    scan.reset();
-                    setIsScanning(false);
-                  } else {
-                    setIsMirror(devices[deviceIndex].mirror);
-                    scan.start(devices[deviceIndex].deviceId);
-                    setIsScanning(true);
-                  }
-                }}
-                disabled={!(eventSelected && gateSelected)}
+                onClick={onStartOrReset}
+                disabled={gateVal === 0}
               >
                 {isScanning ? "重設" : "開始"}
               </Button>
@@ -206,6 +280,7 @@ export default function ScanPage() {
                         id="form-register-location"
                         placeholder="系統自動填入"
                         disabled
+                        value={infoOrg}
                       />
                     </Form.Group>
                   </Col>
@@ -219,6 +294,7 @@ export default function ScanPage() {
                         id="form-register-location"
                         placeholder="系統自動填入"
                         disabled
+                        value={infoName}
                       />
                     </Form.Group>
                   </Col>
@@ -234,6 +310,7 @@ export default function ScanPage() {
                         id="form-register-location"
                         placeholder="系統自動填入"
                         disabled
+                        value={infoRole}
                       />
                     </Form.Group>
                   </Col>
@@ -247,11 +324,12 @@ export default function ScanPage() {
                         id="form-register-location"
                         placeholder="系統自動填入"
                         disabled
+                        value={infoTime}
                       />
                     </Form.Group>
                   </Col>
                 </Form.Row>
-                <Button block variant="danger">
+                <Button block variant="danger" disabled>
                   駁回簽到
                 </Button>
               </Card.Body>

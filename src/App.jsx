@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch } from "react-router-dom";
-import { renderRoutes } from "react-router-config";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -10,6 +10,7 @@ import { useReducer } from "reinspect";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import routesConfig from "./config/routes";
+import renderRoutes from "./units/renderRoutes";
 // import './css/style.css';
 import "./css/App.css";
 import "./css/Main.css";
@@ -23,7 +24,7 @@ library.add(fab, fas, far);
 const initState = reducers();
 
 export default function App() {
-  const store = useReducer(reducers, initState, undefined, "S");
+  const store = useReducer(reducers, initState, (state) => state, "S");
   return (
     <BrowserRouter>
       <StoreContext.Provider value={{ state: store[0], dispatch: store[1] }}>

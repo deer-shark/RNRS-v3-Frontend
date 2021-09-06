@@ -21,14 +21,17 @@ const routes = {
     {
       path: "/scan",
       component: loadable(() => import("../pages/ScanPage")),
+      protected: true,
     },
     {
-      path: "/manageA",
-      component: loadable(() => import("../pages/ManageAPage")),
+      path: "/manageDeclare",
+      component: loadable(() => import("../pages/ManageDeclarePage")),
+      protected: true,
     },
     {
-      path: "/manageB",
-      component: loadable(() => import("../pages/ManageBPage")),
+      path: "/manageCheckin",
+      component: loadable(() => import("../pages/ManageCheckinPage")),
+      protected: true,
     },
     {
       path: "/login",

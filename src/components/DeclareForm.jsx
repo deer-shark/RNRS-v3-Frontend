@@ -21,6 +21,7 @@ export default function DeclareForm(props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [googleFormSrc, setGoogleFormSrc] = useState(null);
 
   useEffect(() => {
     dispatch(setBackground(event.backgroundImage));
@@ -54,6 +55,7 @@ export default function DeclareForm(props) {
               });
             } else {
               console.log("GoogleForm");
+              setGoogleFormSrc(event.googleFormSrc + hash);
             }
             break;
           }
@@ -231,11 +233,11 @@ export default function DeclareForm(props) {
           </Row>
         </Form>
       </Container>
-      {event.googleFormSrc && (
+      {googleFormSrc && (
         <Container className="info-container">
           <h2>健康聲明書</h2>
           <iframe
-            src={event.googleFormSrc}
+            src={googleFormSrc}
             height="400"
             width="100%"
             frameBorder="0"

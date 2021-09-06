@@ -53,3 +53,11 @@
 .info-container hr#col-sm-hr {
   display: none;
 }
+
+.react-bootstrap-table table {
+  /*overflow: auto !important;*/
+  /*display: block !important;*/
+
+  table-layout: auto !important;
+  /*white-space: nowrap;*/
+}
