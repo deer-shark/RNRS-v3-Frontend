@@ -5,9 +5,11 @@ import QRCode from "qrcode.react";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import API from "../API";
 
 const ReactSwal = withReactContent(Swal);
+const { SearchBar } = Search;
 
 function formatterHash(content) {
   return content.substr(0, 6);
@@ -102,69 +104,80 @@ const expandRow = {
 
 export default function ManageDeclarePage() {
   const [data, setData] = useState([]);
+  const [eventList, setEventList] = useState([{ id: 0, value: "Loading..." }]);
 
   useEffect(() => {
-    API.get("/declare/4").then((res) => {
-      if (res.status === 200) setData(res.data.reverse());
+    API.get("/event/organize").then((res) => {
+      if (res.status === 200) setEventList(res.data);
     });
   }, [true]);
+
+  function getDeclares(value) {
+    API.get(`/declare/${value}`).then((res) => {
+      if (res.status === 200) setData(res.data.reverse());
+    });
+  }
 
   return (
     <Container className="info-container">
       <h2>填報管理</h2>
-      <Form.Row>
-        <Col md>
-          <Form.Group>
-            <Form.Label htmlFor="form-scan-event">
-              <FontAwesomeIcon icon="calendar-day" /> 活動
-            </Form.Label>
-            <Form.Control as="select" id="form-scan-event">
-              <option value="0" disabled>
-                請選擇活動
-              </option>
-            </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col md>
-          <Form.Group>
-            <Form.Label htmlFor="form-scan-event">
-              <FontAwesomeIcon icon="door-open" /> 時間
-            </Form.Label>
-            <Form.Control as="select" id="form-scan-event">
-              <option value="0" disabled>
-                請選擇入口
-              </option>
-            </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col md>
-          <Form.Group>
-            <Form.Label htmlFor="form-scan-event">
-              <FontAwesomeIcon icon="video" /> 搜尋
-            </Form.Label>
-            <Form.Control as="select" id="form-scan-event" defaultValue="0">
-              <option value="" disabled>
-                請選擇鏡頭
-              </option>
-            </Form.Control>
-          </Form.Group>
-        </Col>
-      </Form.Row>
-      <Form.Row>
-        <Col>
-          <BootstrapTable
-            wrapperClasses="table-responsive"
-            rowClasses="text-nowrap"
-            keyField="id"
-            data={data}
-            columns={columns}
-            bootstrap4
-            striped
-            hover
-            expandRow={expandRow}
-          />
-        </Col>
-      </Form.Row>
+      <ToolkitProvider keyField="id" data={data} columns={columns} search>
+        {(props) => (
+          <>
+            <Form.Row>
+              <Col md={4}>
+                <Form.Group>
+                  <Form.Label htmlFor="form-scan-event">
+                    <FontAwesomeIcon icon="calendar-day" /> 活動
+                  </Form.Label>
+                  <Form.Control
+                    as="select"
+                    id="form-scan-event"
+                    defaultValue="0"
+                    onChange={(e) => {
+                      getDeclares(e.target.value);
+                    }}
+                  >
+                    <option value="0" disabled>
+                      請選擇活動
+                    </option>
+                    {eventList.map((item) => (
+                      <option value={item.id} key={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+              </Col>
+              <Col md={{ span: 4, offset: 4 }}>
+                <Form.Group>
+                  <Form.Label htmlFor="form-register-name">
+                    <FontAwesomeIcon icon="search" /> 搜尋
+                  </Form.Label>
+                  {/* eslint-disable-next-line react/prop-types,react/jsx-props-no-spreading */}
+                  <SearchBar {...props.searchProps} />
+                </Form.Group>
+              </Col>
+            </Form.Row>
+            <Form.Row>
+              <Col>
+                {/* eslint-disable react/prop-types, react/jsx-props-no-spreading */}
+                <BootstrapTable
+                  search
+                  wrapperClasses="table-responsive"
+                  rowClasses="text-nowrap"
+                  bootstrap4
+                  striped
+                  hover
+                  expandRow={expandRow}
+                  {...props.baseProps}
+                />
+                {/* eslint-enable react/prop-types, react/jsx-props-no-spreading */}
+              </Col>
+            </Form.Row>
+          </>
+        )}
+      </ToolkitProvider>
     </Container>
   );
 }

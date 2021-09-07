@@ -55,9 +55,9 @@
 }
 
 .react-bootstrap-table table {
-  /*overflow: auto !important;*/
-  /*display: block !important;*/
-
   table-layout: auto !important;
-  /*white-space: nowrap;*/
+}
+
+.search-label {
+  display: block;
 }
