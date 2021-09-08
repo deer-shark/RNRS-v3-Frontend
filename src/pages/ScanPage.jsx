@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Form } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  InputGroup,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as ZXing from "@zxing/library";
 import Swal from "sweetalert2";
@@ -8,6 +15,8 @@ import API from "../API";
 
 let codeReader;
 let lastResult;
+let timeout;
+let lastCheckinId;
 
 const scan = {
   start: (deviceId, successCallback) => {
@@ -42,6 +51,8 @@ export default function ScanPage() {
   const [infoRole, setInfoRole] = useState("");
   const [infoName, setInfoName] = useState("");
   const [infoTime, setInfoTime] = useState("");
+  const [canNote, setCanNote] = useState(false);
+  const [noteVal, setNoteVal] = useState("");
 
   useConstructor(() => {
     codeReader = new ZXing.BrowserMultiFormatReader();
@@ -89,11 +100,22 @@ export default function ScanPage() {
     });
   }
 
+  function clearLast() {
+    setInfoName("");
+    setInfoTime("");
+    setInfoOrg("");
+    setInfoRole("");
+    lastResult = undefined;
+    lastCheckinId = undefined;
+    setCanNote(false);
+    setNoteVal("");
+  }
+
   async function onScanSuccess(text) {
     const payload = { hash: text, gateId: gateVal };
+
     await API.post(`/checkin/${eventVal.split("-")[0]}`, payload)
       .then((res) => {
-        console.log(res);
         switch (res.status) {
           case 201: {
             const {
@@ -105,6 +127,12 @@ export default function ScanPage() {
                 EventRole: { value: role },
               },
             } = res.data;
+
+            lastCheckinId = id;
+            setCanNote(true);
+
+            clearTimeout(timeout);
+            timeout = setTimeout(clearLast, 10000);
 
             setInfoName(name);
             setInfoTime(new Date(createdAt).toLocaleString());
@@ -121,6 +149,13 @@ export default function ScanPage() {
             break;
           }
           case 400: {
+            Swal.fire({
+              title: "格式不符",
+              html: `資料：${text}<br>現在時間：${new Date().toLocaleString()}`,
+              showConfirmButton: false,
+              icon: "error",
+              timer: 2000,
+            });
             break;
           }
           case 404: {
@@ -139,15 +174,43 @@ export default function ScanPage() {
     if (isScanning) {
       scan.reset();
       setIsScanning(false);
-      setInfoName("");
-      setInfoTime("");
-      setInfoOrg("");
-      setInfoRole("");
+      clearLast();
     } else {
       setIsMirror(devices[deviceIndex].mirror);
       scan.start(devices[deviceIndex].deviceId, onScanSuccess);
       setIsScanning(true);
     }
+  }
+
+  async function onSubmitNote() {
+    const payload = { content: noteVal };
+
+    await API.post(`/checkin/note/${lastCheckinId}`, payload)
+      .then((res) => {
+        switch (res.status) {
+          case 201: {
+            clearTimeout(timeout);
+            timeout = setTimeout(clearLast, 50000);
+            Swal.fire({
+              title: "備註成功",
+              showConfirmButton: false,
+              icon: "success",
+              timer: 1000,
+            });
+            setCanNote(false);
+            break;
+          }
+          case 404: {
+            break;
+          }
+          default:
+            break;
+        }
+        setNoteVal("");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -329,6 +392,37 @@ export default function ScanPage() {
                     </Form.Group>
                   </Col>
                 </Form.Row>
+                <InputGroup className="mb-2">
+                  <InputGroup.Text>
+                    <Form.Label
+                      htmlFor="form-checkin-note"
+                      className="my-0"
+                      style={{ color: "#212529" }}
+                    >
+                      <FontAwesomeIcon icon="book" /> 備註
+                    </Form.Label>
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    id="form-checkin-note"
+                    placeholder="非必填"
+                    value={noteVal}
+                    onChange={(e) => {
+                      setNoteVal(e.target.value);
+                    }}
+                    disabled={!canNote}
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      type="submit"
+                      className="my-0 btn-rnrs"
+                      disabled={!canNote}
+                      onClick={onSubmitNote}
+                    >
+                      送出
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
                 <Button block variant="danger" disabled>
                   駁回簽到
                 </Button>

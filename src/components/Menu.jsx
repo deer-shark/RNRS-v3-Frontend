@@ -5,7 +5,6 @@ import ExpiredStorage from "expired-storage";
 
 export default function Menu() {
   const user = new ExpiredStorage().getJson("user");
-  console.log(!!user);
 
   return (
     <>

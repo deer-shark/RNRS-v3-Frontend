@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Form } from "react-bootstrap";
-import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Container } from "react-bootstrap";
 import API from "../API";
-
-const { SearchBar } = Search;
+import SmartTable from "../components/SmartTable";
 
 function formatterHash(content) {
   return content.substr(0, 6);
@@ -51,6 +47,10 @@ const columns = [
     text: "人員",
   },
   {
+    dataField: "note",
+    text: "備註",
+  },
+  {
     dataField: "createdAt",
     text: "刷入時間",
     formatter: formatterCreatedAt,
@@ -76,62 +76,12 @@ export default function ManageCheckinPage() {
   return (
     <Container className="info-container">
       <h2>刷入管理</h2>
-      <ToolkitProvider keyField="id" data={data} columns={columns} search>
-        {(props) => (
-          <>
-            <Form.Row>
-              <Col md={4}>
-                <Form.Group>
-                  <Form.Label htmlFor="form-scan-event">
-                    <FontAwesomeIcon icon="calendar-day" /> 活動
-                  </Form.Label>
-                  <Form.Control
-                    as="select"
-                    id="form-scan-event"
-                    defaultValue="0"
-                    onChange={(e) => {
-                      getCheckin(e.target.value);
-                    }}
-                  >
-                    <option value="0" disabled>
-                      請選擇活動
-                    </option>
-                    {eventList.map((item) => (
-                      <option value={item.id} key={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-              </Col>
-              <Col md={{ span: 4, offset: 4 }}>
-                <Form.Group>
-                  <Form.Label htmlFor="form-register-name">
-                    <FontAwesomeIcon icon="search" /> 搜尋
-                  </Form.Label>
-                  {/* eslint-disable-next-line react/prop-types,react/jsx-props-no-spreading */}
-                  <SearchBar {...props.searchProps} />
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col>
-                {/* eslint-disable react/prop-types, react/jsx-props-no-spreading */}
-                <BootstrapTable
-                  search
-                  wrapperClasses="table-responsive"
-                  rowClasses="text-nowrap"
-                  bootstrap4
-                  striped
-                  hover
-                  {...props.baseProps}
-                />
-                {/* eslint-enable react/prop-types, react/jsx-props-no-spreading */}
-              </Col>
-            </Form.Row>
-          </>
-        )}
-      </ToolkitProvider>
+      <SmartTable
+        data={data}
+        columns={columns}
+        eventList={eventList}
+        eventOnChangeCallback={getCheckin}
+      />
     </Container>
   );
 }

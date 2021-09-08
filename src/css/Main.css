@@ -58,6 +58,27 @@
   table-layout: auto !important;
 }
 
+.react-bootstrap-table td {
+  vertical-align: middle;
+}
+
+.react-bootstrap-table .has-button td {
+  padding: 0.25rem 0.75rem;
+}
+
+.react-bootstrap-table-footer {
+  line-height: 36px;
+  text-align: center;
+}
+
+.react-bootstrap-table-footer .col-md-4 {
+  margin-top: 8px;
+}
+
+.react-bootstrap-table-page-btns-ul {
+  display: inline-flex;
+}
+
 .search-label {
   display: block;
 }

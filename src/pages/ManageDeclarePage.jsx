@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form } from "react-bootstrap";
-import BootstrapTable from "react-bootstrap-table-next";
+import { Button, Container } from "react-bootstrap";
 import QRCode from "qrcode.react";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import API from "../API";
+import SmartTable from "../components/SmartTable";
 
 const ReactSwal = withReactContent(Swal);
-const { SearchBar } = Search;
 
 function formatterHash(content) {
   return content.substr(0, 6);
@@ -82,7 +79,7 @@ const columns = [
   },
 ];
 
-const expandRow = {
+/* const expandRow = {
   renderer: () => <></>,
   showExpandColumn: true,
   expandByColumnOnly: true,
@@ -100,7 +97,7 @@ const expandRow = {
     }
     return <FontAwesomeIcon icon="plus" />;
   },
-};
+}; */
 
 export default function ManageDeclarePage() {
   const [data, setData] = useState([]);
@@ -121,63 +118,13 @@ export default function ManageDeclarePage() {
   return (
     <Container className="info-container">
       <h2>填報管理</h2>
-      <ToolkitProvider keyField="id" data={data} columns={columns} search>
-        {(props) => (
-          <>
-            <Form.Row>
-              <Col md={4}>
-                <Form.Group>
-                  <Form.Label htmlFor="form-scan-event">
-                    <FontAwesomeIcon icon="calendar-day" /> 活動
-                  </Form.Label>
-                  <Form.Control
-                    as="select"
-                    id="form-scan-event"
-                    defaultValue="0"
-                    onChange={(e) => {
-                      getDeclares(e.target.value);
-                    }}
-                  >
-                    <option value="0" disabled>
-                      請選擇活動
-                    </option>
-                    {eventList.map((item) => (
-                      <option value={item.id} key={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-              </Col>
-              <Col md={{ span: 4, offset: 4 }}>
-                <Form.Group>
-                  <Form.Label htmlFor="form-register-name">
-                    <FontAwesomeIcon icon="search" /> 搜尋
-                  </Form.Label>
-                  {/* eslint-disable-next-line react/prop-types,react/jsx-props-no-spreading */}
-                  <SearchBar {...props.searchProps} />
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col>
-                {/* eslint-disable react/prop-types, react/jsx-props-no-spreading */}
-                <BootstrapTable
-                  search
-                  wrapperClasses="table-responsive"
-                  rowClasses="text-nowrap"
-                  bootstrap4
-                  striped
-                  hover
-                  expandRow={expandRow}
-                  {...props.baseProps}
-                />
-                {/* eslint-enable react/prop-types, react/jsx-props-no-spreading */}
-              </Col>
-            </Form.Row>
-          </>
-        )}
-      </ToolkitProvider>
+      <SmartTable
+        data={data}
+        columns={columns}
+        eventList={eventList}
+        eventOnChangeCallback={getDeclares}
+        hasButton
+      />
     </Container>
   );
 }
