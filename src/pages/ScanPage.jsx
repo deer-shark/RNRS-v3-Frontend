@@ -74,9 +74,7 @@ export default function ScanPage() {
         });
         setDevices(dd);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   });
 
   useEffect(() => {
@@ -165,9 +163,7 @@ export default function ScanPage() {
             break;
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(() => {});
   }
 
   function onStartOrReset() {
