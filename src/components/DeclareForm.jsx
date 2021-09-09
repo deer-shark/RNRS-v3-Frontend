@@ -42,7 +42,6 @@ export default function DeclareForm(props) {
     const payload = { orgId, roleId, name, phone, email };
     await API.post(`/declare/${event.code}`, payload)
       .then((res) => {
-        console.log(res);
         switch (res.status) {
           case 201: {
             const { hash, googleForm } = res.data;
@@ -54,7 +53,6 @@ export default function DeclareForm(props) {
                   "<ol><li>請妥善保存您的 QR Code 以供入場查驗用。</li></ol>",
               });
             } else {
-              console.log("GoogleForm");
               setGoogleFormSrc(event.googleFormSrc + hash);
             }
             break;
@@ -63,9 +61,7 @@ export default function DeclareForm(props) {
             break;
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(() => {});
   }
 
   return (

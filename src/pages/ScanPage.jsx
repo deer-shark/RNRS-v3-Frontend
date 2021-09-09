@@ -208,9 +208,7 @@ export default function ScanPage() {
         }
         setNoteVal("");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(() => {});
   }
 
   return (

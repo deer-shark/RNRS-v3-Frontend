@@ -49,9 +49,7 @@ export default function LoginForm() {
             throw new Error();
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(() => {});
   }
 
   return (
