@@ -18,12 +18,18 @@ let lastResult;
 let timeout;
 let lastCheckinId;
 
+/*
+Format:
+11: QR Code
+4: Code 128
+*/
+
 const scan = {
   start: (deviceId, successCallback) => {
     codeReader.decodeFromVideoDevice(deviceId, "scanner", (result, err) => {
       if (result && result.text !== lastResult) {
-        const { text } = result;
-        successCallback(text);
+        const { text, format } = result;
+        successCallback(text, format);
         lastResult = result.text;
       }
       if (err && !(err instanceof ZXing.NotFoundException)) {
@@ -109,10 +115,15 @@ export default function ScanPage() {
     setNoteVal("");
   }
 
-  async function onScanSuccess(text) {
-    const payload = { hash: text, gateId: gateVal };
+  async function onScanSuccess(text, format = 11) {
+    const eventId = eventVal.split("-")[0];
+    let hash = text;
+    if (format === 4) {
+      hash = `RNRSv3-${eventId}-${text}`;
+    }
+    const payload = { hash, gateId: gateVal };
 
-    await API.post(`/checkin/${eventVal.split("-")[0]}`, payload)
+    await API.post(`/checkin/${eventId}`, payload)
       .then((res) => {
         switch (res.status) {
           case 201: {
@@ -146,17 +157,15 @@ export default function ScanPage() {
             });
             break;
           }
-          case 400: {
+          case 400:
+          case 404: {
             Swal.fire({
-              title: "格式不符",
+              title: "格式不符或不存在",
               html: `資料：${text}<br>現在時間：${new Date().toLocaleString()}`,
               showConfirmButton: false,
               icon: "error",
               timer: 2000,
             });
-            break;
-          }
-          case 404: {
             break;
           }
           default:
