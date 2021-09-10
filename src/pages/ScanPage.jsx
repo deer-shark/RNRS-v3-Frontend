@@ -150,10 +150,10 @@ export default function ScanPage() {
 
             Swal.fire({
               title: "刷入成功",
-              html: `簽到ID：${id}<br>現在時間：${new Date().toLocaleString()}`,
+              html: `簽到ID：${id}<br>現在時間：${new Date().toLocaleString()}<br><strong>請依規定輸入資料至備註（若有需要）</strong>`,
               showConfirmButton: false,
               icon: "success",
-              timer: 1500,
+              timer: 1800,
             });
             break;
           }
