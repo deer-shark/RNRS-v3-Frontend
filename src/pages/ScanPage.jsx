@@ -59,6 +59,7 @@ export default function ScanPage() {
   const [infoTime, setInfoTime] = useState("");
   const [canNote, setCanNote] = useState(false);
   const [noteVal, setNoteVal] = useState("");
+  const [noteVal2, setNoteVal2] = useState("");
 
   useConstructor(() => {
     codeReader = new ZXing.BrowserMultiFormatReader();
@@ -113,6 +114,7 @@ export default function ScanPage() {
     lastCheckinId = undefined;
     setCanNote(false);
     setNoteVal("");
+    setNoteVal2("");
   }
 
   async function onScanSuccess(text, format = 11) {
@@ -141,7 +143,7 @@ export default function ScanPage() {
             setCanNote(true);
 
             clearTimeout(timeout);
-            timeout = setTimeout(clearLast, 10000);
+            timeout = setTimeout(clearLast, 12000);
 
             setInfoName(name);
             setInfoTime(new Date(createdAt).toLocaleString());
@@ -188,7 +190,11 @@ export default function ScanPage() {
   }
 
   async function onSubmitNote() {
-    const payload = { content: noteVal };
+    let content = noteVal;
+    if (noteVal2 !== "") {
+      content += ` - ${noteVal2}`;
+    }
+    const payload = { content };
 
     await API.post(`/checkin/note/${lastCheckinId}`, payload)
       .then((res) => {
@@ -212,6 +218,7 @@ export default function ScanPage() {
             break;
         }
         setNoteVal("");
+        setNoteVal2("");
       })
       .catch(() => {});
   }
@@ -402,7 +409,7 @@ export default function ScanPage() {
                       className="my-0"
                       style={{ color: "#212529" }}
                     >
-                      <FontAwesomeIcon icon="book" /> 備註
+                      <FontAwesomeIcon icon="book" /> 備註 1
                     </Form.Label>
                   </InputGroup.Text>
                   <Form.Control
@@ -425,6 +432,27 @@ export default function ScanPage() {
                       送出
                     </Button>
                   </InputGroup.Append>
+                </InputGroup>
+                <InputGroup className="mb-2">
+                  <InputGroup.Text>
+                    <Form.Label
+                      htmlFor="form-checkin-note"
+                      className="my-0"
+                      style={{ color: "#212529" }}
+                    >
+                      <FontAwesomeIcon icon="book" /> 備註 2
+                    </Form.Label>
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    id="form-checkin-note"
+                    placeholder="非必填"
+                    value={noteVal2}
+                    onChange={(e) => {
+                      setNoteVal2(e.target.value);
+                    }}
+                    disabled={!canNote}
+                  />
                 </InputGroup>
                 <Button block variant="danger" disabled>
                   駁回簽到
