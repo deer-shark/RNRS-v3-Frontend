@@ -32,7 +32,7 @@ export default function Menu() {
           <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
           <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
         </NavDropdown> */}
-        {!!user && (
+        {!!user && user.role !== "gate" && (
           <Nav.Item>
             <NavLink
               to="/manageDeclare"
@@ -43,7 +43,7 @@ export default function Menu() {
             </NavLink>
           </Nav.Item>
         )}
-        {!!user && (
+        {!!user && user.role !== "gate" && (
           <Nav.Item>
             <NavLink
               to="/manageCheckin"
