@@ -60,6 +60,7 @@ export default function ScanPage() {
   const [canNote, setCanNote] = useState(false);
   const [noteVal, setNoteVal] = useState("");
   const [noteVal2, setNoteVal2] = useState("");
+  const [input, setInput] = useState("");
 
   useConstructor(() => {
     codeReader = new ZXing.BrowserMultiFormatReader();
@@ -115,6 +116,7 @@ export default function ScanPage() {
     setCanNote(false);
     setNoteVal("");
     setNoteVal2("");
+    setInput("");
   }
 
   async function onScanSuccess(text, format = 11) {
@@ -320,6 +322,39 @@ export default function ScanPage() {
         </Form.Row>
         <Form.Row>
           <Col md>
+            <InputGroup className="mb-2">
+              <InputGroup.Text>
+                <Form.Label
+                  htmlFor="form-checkin-note"
+                  className="my-0"
+                  style={{ color: "#212529" }}
+                >
+                  <FontAwesomeIcon icon="book" /> 手動輸入
+                </Form.Label>
+              </InputGroup.Text>
+              <Form.Control
+                type="text"
+                id="form-checkin-note"
+                placeholder="請輸入"
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
+              />
+              <InputGroup.Append>
+                <Button
+                  type="submit"
+                  className="my-0 btn-rnrs"
+                  disabled={input === "" || !isScanning}
+                  onClick={() => {
+                    onScanSuccess(input, 4);
+                    setInput("");
+                  }}
+                >
+                  輸入
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
             <Card style={{ backgroundColor: "#E9ECEF" }}>
               <Card.Body>
                 <Card.Title>
@@ -409,7 +444,7 @@ export default function ScanPage() {
                       className="my-0"
                       style={{ color: "#212529" }}
                     >
-                      <FontAwesomeIcon icon="book" /> 備註 1
+                      <FontAwesomeIcon icon="book" /> 備註 1 (體溫)
                     </Form.Label>
                   </InputGroup.Text>
                   <Form.Control
@@ -440,7 +475,7 @@ export default function ScanPage() {
                       className="my-0"
                       style={{ color: "#212529" }}
                     >
-                      <FontAwesomeIcon icon="book" /> 備註 2
+                      <FontAwesomeIcon icon="book" /> 備註 2 (編號)
                     </Form.Label>
                   </InputGroup.Text>
                   <Form.Control
