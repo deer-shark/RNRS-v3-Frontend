@@ -335,7 +335,7 @@ export default function ScanPage() {
               <Form.Control
                 type="text"
                 id="form-checkin-note"
-                placeholder="請輸入"
+                placeholder="請輸入學號或條碼資料"
                 value={input}
                 onChange={(e) => {
                   setInput(e.target.value);
@@ -450,7 +450,7 @@ export default function ScanPage() {
                   <Form.Control
                     type="text"
                     id="form-checkin-note"
-                    placeholder="非必填"
+                    placeholder="請依規定輸入"
                     value={noteVal}
                     onChange={(e) => {
                       setNoteVal(e.target.value);
@@ -481,7 +481,7 @@ export default function ScanPage() {
                   <Form.Control
                     type="text"
                     id="form-checkin-note"
-                    placeholder="非必填"
+                    placeholder="請依規定輸入"
                     value={noteVal2}
                     onChange={(e) => {
                       setNoteVal2(e.target.value);
