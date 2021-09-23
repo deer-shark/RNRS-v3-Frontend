@@ -203,7 +203,7 @@ export default function ScanPage() {
         switch (res.status) {
           case 201: {
             clearTimeout(timeout);
-            timeout = setTimeout(clearLast, 50000);
+            timeout = setTimeout(clearLast, 5000);
             Swal.fire({
               title: "備註成功",
               showConfirmButton: false,
@@ -223,6 +223,18 @@ export default function ScanPage() {
         setNoteVal2("");
       })
       .catch(() => {});
+  }
+
+  function isNoteSubmitDisable() {
+    const eventCode = eventVal.split("-")[1];
+    switch (eventCode) {
+      case "fsshlib1f":
+        return !noteVal || !noteVal2;
+      case "fsshlib1f2":
+        return !noteVal2;
+      default:
+        return false;
+    }
   }
 
   return (
@@ -461,7 +473,7 @@ export default function ScanPage() {
                     <Button
                       type="submit"
                       className="my-0 btn-rnrs"
-                      disabled={!canNote}
+                      disabled={!canNote || isNoteSubmitDisable()}
                       onClick={onSubmitNote}
                     >
                       送出
