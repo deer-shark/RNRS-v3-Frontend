@@ -487,7 +487,7 @@ export default function ScanPage() {
                       className="my-0"
                       style={{ color: "#212529" }}
                     >
-                      <FontAwesomeIcon icon="book" /> 備註 2 (編號)
+                      <FontAwesomeIcon icon="book" /> 備註 2 (座位編號)
                     </Form.Label>
                   </InputGroup.Text>
                   <Form.Control
