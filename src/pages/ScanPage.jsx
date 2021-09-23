@@ -145,7 +145,7 @@ export default function ScanPage() {
             setCanNote(true);
 
             clearTimeout(timeout);
-            timeout = setTimeout(clearLast, 12000);
+            timeout = setTimeout(clearLast, 180000);
 
             setInfoName(name);
             setInfoTime(new Date(createdAt).toLocaleString());
