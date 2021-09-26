@@ -238,6 +238,42 @@ export default function ScanPage() {
       .catch(() => {});
   }
 
+  async function onReject() {
+    Swal.fire({
+      title: "確定駁回？",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "駁回紀錄",
+      cancelButtonText: "取消",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await API.delete(`/checkin/${lastCheckinId}`)
+          .then((res) => {
+            switch (res.status) {
+              case 204: {
+                Swal.fire({
+                  title: "駁回成功",
+                  showConfirmButton: false,
+                  icon: "success",
+                  timer: 1000,
+                });
+                clearLast();
+                break;
+              }
+              case 404: {
+                break;
+              }
+              default:
+                break;
+            }
+          })
+          .catch(() => {});
+      }
+    });
+  }
+
   function isNoteSubmitDisable() {
     const eventCode = eventVal.split("-")[1];
     switch (eventCode) {
@@ -514,7 +550,12 @@ export default function ScanPage() {
                     disabled={!canNote}
                   />
                 </InputGroup>
-                <Button block variant="danger" disabled>
+                <Button
+                  block
+                  variant="danger"
+                  disabled={!lastCheckinId}
+                  onClick={onReject}
+                >
                   駁回簽到
                 </Button>
               </Card.Body>
