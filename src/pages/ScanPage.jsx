@@ -28,8 +28,8 @@ const scan = {
   start: (deviceId, successCallback) => {
     codeReader.decodeFromVideoDevice(deviceId, "scanner", (result, err) => {
       if (result && result.text !== lastResult) {
-        const { text, format } = result;
-        successCallback(text, format);
+        const { text } = result;
+        successCallback(text);
         lastResult = result.text;
       }
       if (err && !(err instanceof ZXing.NotFoundException)) {
@@ -119,11 +119,11 @@ export default function ScanPage() {
     setInput("");
   }
 
-  async function onScanSuccess(text, format = 11) {
+  async function onScanSuccess(text, manual = false) {
     const eventId = eventVal.split("-")[0];
     let hash = text;
-    if (format === 4) {
-      hash = `RNRSv3-${eventId}-${text}`;
+    if (manual === true) {
+      hash = `RNRSv3-${eventId}-${text}-phone`;
     }
     const payload = { hash, gateId: gateVal };
 
@@ -139,6 +139,7 @@ export default function ScanPage() {
                 EventOrg: { value: org },
                 EventRole: { value: role },
               },
+              history,
             } = res.data;
 
             lastCheckinId = id;
@@ -152,12 +153,24 @@ export default function ScanPage() {
             setInfoOrg(org);
             setInfoRole(role);
 
+            let historyHtml = "<br><br>刷入紀錄<br>";
+
+            for (let i = 0; i < history.length; i += 1) {
+              historyHtml += `${new Date(
+                history[i].createdAt
+              ).toLocaleString()} - ${history[i].id} - ${
+                history[i].EventGate.value
+              }<br>`;
+            }
+
             Swal.fire({
               title: "刷入成功",
-              html: `簽到ID：${id}<br>現在時間：${new Date().toLocaleString()}<br><strong>請依規定輸入資料至備註（若有需要）</strong>`,
+              html: `簽到ID：${id}<br>現在時間：${new Date().toLocaleString()}<br><strong>請依規定輸入資料至備註（若有需要）</strong>${
+                history.length ? historyHtml : ""
+              }`,
               showConfirmButton: false,
               icon: "success",
-              timer: 1800,
+              timer: 2500,
             });
             break;
           }
@@ -347,7 +360,7 @@ export default function ScanPage() {
               <Form.Control
                 type="text"
                 id="form-checkin-note"
-                placeholder="請輸入學號或條碼資料"
+                placeholder="請輸入學號或指定識別資料"
                 value={input}
                 onChange={(e) => {
                   setInput(e.target.value);
@@ -359,7 +372,7 @@ export default function ScanPage() {
                   className="my-0 btn-rnrs"
                   disabled={input === "" || !isScanning}
                   onClick={() => {
-                    onScanSuccess(input, 4);
+                    onScanSuccess(input, true);
                     setInput("");
                   }}
                 >
