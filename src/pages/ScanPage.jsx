@@ -204,7 +204,7 @@ export default function ScanPage() {
     }
   }
 
-  async function onSubmitNote() {
+  async function onSubmitNote(hasAlert = true) {
     let content = noteVal;
     if (noteVal2 !== "") {
       content += ` - ${noteVal2}`;
@@ -216,13 +216,15 @@ export default function ScanPage() {
         switch (res.status) {
           case 201: {
             clearTimeout(timeout);
-            timeout = setTimeout(clearLast, 5000);
-            Swal.fire({
-              title: "備註成功",
-              showConfirmButton: false,
-              icon: "success",
-              timer: 1000,
-            });
+            timeout = setTimeout(clearLast, 3000);
+            if (hasAlert) {
+              Swal.fire({
+                title: "備註成功",
+                showConfirmButton: false,
+                icon: "success",
+                timer: 1000,
+              });
+            }
             setCanNote(false);
             break;
           }
@@ -382,40 +384,7 @@ export default function ScanPage() {
           </Col>
         </Form.Row>
         <Form.Row>
-          <Col md>
-            <InputGroup className="mb-2">
-              <InputGroup.Text>
-                <Form.Label
-                  htmlFor="form-checkin-note"
-                  className="my-0"
-                  style={{ color: "#212529" }}
-                >
-                  <FontAwesomeIcon icon="book" /> 手動輸入
-                </Form.Label>
-              </InputGroup.Text>
-              <Form.Control
-                type="text"
-                id="form-checkin-note"
-                placeholder="請輸入學號或指定識別資料"
-                value={input}
-                onChange={(e) => {
-                  setInput(e.target.value);
-                }}
-              />
-              <InputGroup.Append>
-                <Button
-                  type="submit"
-                  className="my-0 btn-rnrs"
-                  disabled={input === "" || !isScanning}
-                  onClick={() => {
-                    onScanSuccess(input, true);
-                    setInput("");
-                  }}
-                >
-                  輸入
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
+          <Col md className="mb-2">
             <Card style={{ backgroundColor: "#E9ECEF" }}>
               <Card.Body>
                 <Card.Title>
@@ -433,6 +402,47 @@ export default function ScanPage() {
             </Card>
           </Col>
           <Col md>
+            <InputGroup className="mb-2">
+              <InputGroup.Text>
+                <Form.Label
+                  htmlFor="form-checkin-note"
+                  className="my-0"
+                  style={{ color: "#212529" }}
+                >
+                  <FontAwesomeIcon icon="book" /> 手動輸入
+                </Form.Label>
+              </InputGroup.Text>
+              <Form.Control
+                type="text"
+                id="form-checkin-note"
+                placeholder="請輸入學號或指定識別資料"
+                value={input}
+                disabled={!isScanning}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  setCanNote(e.target.value !== "");
+                }}
+              />
+              <InputGroup.Append>
+                <Button
+                  type="submit"
+                  className="my-0 px-4 btn-rnrs"
+                  disabled={
+                    input === "" ||
+                    !isScanning ||
+                    noteVal !== "" ||
+                    noteVal2 !== ""
+                  }
+                  onClick={() => {
+                    onScanSuccess(input, true);
+                    setInput("");
+                    setCanNote(true);
+                  }}
+                >
+                  送出
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
             <Card style={{ backgroundColor: "#E9ECEF" }}>
               <Card.Body>
                 <Card.Title>
@@ -518,16 +528,6 @@ export default function ScanPage() {
                     }}
                     disabled={!canNote}
                   />
-                  <InputGroup.Append>
-                    <Button
-                      type="submit"
-                      className="my-0 btn-rnrs"
-                      disabled={!canNote || isNoteSubmitDisable()}
-                      onClick={onSubmitNote}
-                    >
-                      送出
-                    </Button>
-                  </InputGroup.Append>
                 </InputGroup>
                 <InputGroup className="mb-2">
                   <InputGroup.Text>
@@ -550,14 +550,41 @@ export default function ScanPage() {
                     disabled={!canNote}
                   />
                 </InputGroup>
-                <Button
-                  block
-                  variant="danger"
-                  disabled={!lastCheckinId}
-                  onClick={onReject}
-                >
-                  駁回簽到
-                </Button>
+                <Form.Row>
+                  <Col md className="mb-2">
+                    <Button
+                      block
+                      variant="danger"
+                      disabled={!lastCheckinId}
+                      onClick={onReject}
+                    >
+                      駁回簽到
+                    </Button>
+                  </Col>
+                  <Col md>
+                    <Button
+                      type="submit"
+                      className="my-0 btn-rnrs"
+                      disabled={
+                        !canNote ||
+                        (noteVal === "" && noteVal2 === "") ||
+                        isNoteSubmitDisable()
+                      }
+                      onClick={() => {
+                        if (input === "" && !!lastCheckinId) {
+                          onSubmitNote();
+                        } else {
+                          onScanSuccess(input, true).then(() => {
+                            onSubmitNote(false);
+                          });
+                          setInput("");
+                        }
+                      }}
+                    >
+                      {!lastCheckinId ? "送出並備註" : "送出備註"}
+                    </Button>
+                  </Col>
+                </Form.Row>
               </Card.Body>
             </Card>
           </Col>
