@@ -80,7 +80,7 @@ export default function ManageCheckinPage() {
         data={data}
         columns={columns}
         eventList={eventList}
-        eventOnChangeCallback={getCheckin}
+        eventOnChangeCallback={(v) => getCheckin(v)}
       />
     </Container>
   );

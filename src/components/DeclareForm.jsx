@@ -48,7 +48,15 @@ export default function DeclareForm(props) {
             if (!googleForm) {
               ReactSwal.fire({
                 title: "填報完成！",
-                html: <QRCode value={hash} size="255" level="H" />,
+                html: (
+                  <>
+                    <QRCode value={hash} size="255" level="H" renderAs="svg" />
+                    <p style={{ marginBottom: "0px" }}>
+                      <br />
+                      隨機碼：{hash.split("-")[2].substr(0, 6)}
+                    </p>
+                  </>
+                ),
                 footer:
                   "<ol><li>請妥善保存您的 QR Code 以供入場查驗用。</li></ol>",
               });
@@ -68,7 +76,7 @@ export default function DeclareForm(props) {
     <>
       <Title content={event.name} />
       <Container className="info-container">
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={(e) => handleSubmit(e)}>
           <h2>身分資料填報</h2>
           <Row className="question-part">
             <Col className="col-12">

@@ -122,7 +122,7 @@ export default function ManageDeclarePage() {
         data={data}
         columns={columns}
         eventList={eventList}
-        eventOnChangeCallback={getDeclares}
+        eventOnChangeCallback={(v) => getDeclares(v)}
         hasButton
       />
     </Container>

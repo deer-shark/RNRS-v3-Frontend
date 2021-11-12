@@ -14,24 +14,27 @@ export default function EventList(props) {
       <Container className="info-container">
         <h2>所有進行中活動</h2>
         <ListGroup className="toc-container" id="toc">
-          {events.map((item) => (
-            <ListGroupItem
-              action
-              className="rnrs-list-item"
-              onClick={() => {
-                history.push(`/declare/${item.code}`);
-              }}
-              key={item.id}
-            >
-              <h5>{item.name}</h5>
-              <Badge variant="warning">
-                <FontAwesomeIcon icon={["far", "clock"]} /> {item.date}
-              </Badge>{" "}
-              <Badge variant="secondary">
-                <FontAwesomeIcon icon={["far", "map"]} /> {item.location}
-              </Badge>
-            </ListGroupItem>
-          ))}
+          {events
+            .slice(0)
+            .reverse()
+            .map((item) => (
+              <ListGroupItem
+                action
+                className="rnrs-list-item"
+                onClick={() => {
+                  history.push(`/declare/${item.code}`);
+                }}
+                key={item.id}
+              >
+                <h5>{item.name}</h5>
+                <Badge variant="warning">
+                  <FontAwesomeIcon icon={["far", "clock"]} /> {item.date}
+                </Badge>{" "}
+                <Badge variant="secondary">
+                  <FontAwesomeIcon icon={["far", "map"]} /> {item.location}
+                </Badge>
+              </ListGroupItem>
+            ))}
         </ListGroup>
       </Container>
     </>

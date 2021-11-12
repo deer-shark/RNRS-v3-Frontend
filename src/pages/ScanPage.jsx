@@ -283,6 +283,8 @@ export default function ScanPage() {
         return !noteVal || !noteVal2;
       case "fsshlib1f2":
         return !noteVal2;
+      case "fsshlib3fk":
+        return !noteVal || !noteVal2;
       default:
         return false;
     }
@@ -375,7 +377,7 @@ export default function ScanPage() {
               <Button
                 className="btn-rnrs"
                 block
-                onClick={onStartOrReset}
+                onClick={() => onStartOrReset}
                 disabled={gateVal === 0}
               >
                 {isScanning ? "重設" : "開始"}
@@ -556,7 +558,7 @@ export default function ScanPage() {
                       block
                       variant="danger"
                       disabled={!lastCheckinId}
-                      onClick={onReject}
+                      onClick={() => onReject}
                     >
                       駁回簽到
                     </Button>

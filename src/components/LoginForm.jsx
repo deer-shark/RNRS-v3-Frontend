@@ -54,7 +54,7 @@ export default function LoginForm() {
 
   return (
     <div className="Login">
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={(e) => handleSubmit(e)}>
         <h2>使用者登入</h2>
         <Form.Group size="lg" controlId="account">
           <Form.Label>帳號</Form.Label>
