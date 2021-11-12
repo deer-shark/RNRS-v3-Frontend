@@ -27,19 +27,31 @@ export default function DeclareForm(props) {
     dispatch(setBackground(event.backgroundImage));
   }, [backgroundName]);
 
+  function isEmailIgnore() {
+    switch (event.code) {
+      case "fsacmoon":
+        return true;
+      default:
+        return false;
+    }
+  }
+
   function validateForm() {
     return (
       orgId !== "" &&
       roleId !== "" &&
       name.length > 0 &&
       phone.length > 0 &&
-      email.length > 0
+      (isEmailIgnore() || email.length > 0)
     );
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
     const payload = { orgId, roleId, name, phone, email };
+    if (email.length === 0) {
+      payload.email = "-";
+    }
     await API.post(`/declare/${event.code}`, payload)
       .then((res) => {
         switch (res.status) {
