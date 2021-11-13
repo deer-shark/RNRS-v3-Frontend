@@ -219,19 +219,21 @@ export default function DeclareForm(props) {
               </Form.Group>
             </Col>
             <Col md>
-              <Form.Group>
-                <Form.Label htmlFor="form-register-email">
-                  <FontAwesomeIcon icon="envelope" /> 電子郵件
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  id="form-register-email"
-                  placeholder="電子郵件"
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                />
-              </Form.Group>
+              {!isEmailIgnore() ?? (
+                <Form.Group>
+                  <Form.Label htmlFor="form-register-email">
+                    <FontAwesomeIcon icon="envelope" /> 電子郵件
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="form-register-email"
+                    placeholder="電子郵件"
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                  />
+                </Form.Group>
+              )}
             </Col>
           </Row>
           <Row>
