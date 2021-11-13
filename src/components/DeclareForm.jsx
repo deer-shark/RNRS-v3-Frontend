@@ -219,7 +219,7 @@ export default function DeclareForm(props) {
               </Form.Group>
             </Col>
             <Col md>
-              {!isEmailIgnore() ?? (
+              {!isEmailIgnore() && (
                 <Form.Group>
                   <Form.Label htmlFor="form-register-email">
                     <FontAwesomeIcon icon="envelope" /> 電子郵件
