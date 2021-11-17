@@ -16,6 +16,8 @@ function isEventHide(code) {
       return true;
     case "khitlc1101":
       return true;
+    case "demo":
+      return true;
     default:
       return false;
   }
