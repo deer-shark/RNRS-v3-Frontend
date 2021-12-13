@@ -58,19 +58,31 @@ export default function DeclareForm(props) {
           case 201: {
             const { hash, googleForm } = res.data;
             if (!googleForm) {
+              setOrgId("");
+              setRoleId("");
+              setName("");
+              setPhone("");
+              setEmail("");
               ReactSwal.fire({
                 title: "填報完成！",
                 html: (
                   <>
+                    <p>
+                      {name}，歡迎您前來參加
+                      <br />
+                      {event.name}
+                    </p>
                     <QRCode value={hash} size="255" level="H" renderAs="svg" />
                     <p style={{ marginBottom: "0px" }}>
                       <br />
                       隨機碼：{hash.split("-")[2].substr(0, 6)}
+                      <br />
+                      填報時間：{new Date().toLocaleString()}
                     </p>
                   </>
                 ),
                 footer:
-                  "<ol><li>請妥善保存您的 QR Code 以供入場查驗用。</li></ol>",
+                  "<ol><li>請妥善保存您的 QR Code 以供入場查驗用。</li><li>若 QR Code 不慎遺失可重新填報。</li><li>有任何疑問請洽活動主辦方或系統管理員。</li></ol>",
               });
             } else {
               setGoogleFormSrc(event.googleFormSrc + hash);
@@ -139,6 +151,7 @@ export default function DeclareForm(props) {
                   onChange={(e) => {
                     setOrgId(e.target.value);
                   }}
+                  value={orgId}
                 >
                   <option value="" disabled>
                     請選擇單位
@@ -164,6 +177,7 @@ export default function DeclareForm(props) {
                   onChange={(e) => {
                     setRoleId(e.target.value);
                   }}
+                  value={roleId}
                 >
                   <option value="" disabled>
                     請選擇身分
@@ -194,6 +208,7 @@ export default function DeclareForm(props) {
                   onChange={(e) => {
                     setName(e.target.value);
                   }}
+                  value={name}
                 />
               </Form.Group>
             </Col>
@@ -215,6 +230,7 @@ export default function DeclareForm(props) {
                   onChange={(e) => {
                     setPhone(e.target.value);
                   }}
+                  value={phone}
                 />
               </Form.Group>
             </Col>
@@ -231,6 +247,7 @@ export default function DeclareForm(props) {
                     onChange={(e) => {
                       setEmail(e.target.value);
                     }}
+                    value={email}
                   />
                 </Form.Group>
               )}
