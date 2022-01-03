@@ -24,6 +24,8 @@
   box-shadow: 0.5rem 0.5rem 2rem 0.25rem rgba(0, 0, 0, 0.5);
   overflow: hidden;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 20;
 }
 
 .nav-container #logo {
