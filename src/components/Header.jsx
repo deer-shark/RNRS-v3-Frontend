@@ -22,8 +22,8 @@ export default function Header() {
   return (
     <div className="header-container">
       <div className="banner-container" style={styleBanner} />
-      <Container className="nav-container font-weight-bold pb-3" id="navbar">
-        <Navbar expand="lg" variant="light">
+      <Container className="nav-container font-weight-bold" id="navbar">
+        <Navbar expand="lg" variant="light" className="pb-3">
           <Container>
             <Navbar.Brand href="https://deershark.com" id="logo">
               鹿鯊工作室
